@@ -1,0 +1,29 @@
+name: app_review_helper
+description: This plugin will make it easier for you to use in-app review with minimal conditions.
+version: 0.0.1
+homepage: https://github.com/vursin/app_review_helper
+
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+  flutter: ">=2.5.0"
+
+dependencies:
+  app_review: ^2.1.1+1
+  flutter:
+    sdk: flutter
+  package_info_plus: ^3.0.1
+  plugin_platform_interface: ^2.0.2
+  satisfied_version: ^0.1.0
+  shared_preferences: ^2.0.15
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+ 
