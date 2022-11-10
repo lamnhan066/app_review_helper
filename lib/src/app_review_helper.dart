@@ -10,6 +10,19 @@ class AppReviewHelper {
   /// Debug
   static bool _isDebug = false;
 
+  static Future<void> openStore({String? fallbackUrl}) async {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        await AppReview.openGooglePlay(fallbackUrl: fallbackUrl);
+        break;
+      case TargetPlatform.iOS:
+        await AppReview.openAppStore(fallbackUrl: fallbackUrl);
+        break;
+      default:
+        _print('The current platform does not support `openStore`');
+    }
+  }
+
   /// This function will request an in-app review every time a new version is published
   /// and it satisfy with the conditions.
   static Future<void> initial({
