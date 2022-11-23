@@ -1,6 +1,6 @@
 name: app_review_helper
 description: This plugin will make it easier for you to use in-app review with minimal conditions.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/vursin/app_review_helper
 
 environment:
@@ -14,6 +14,7 @@ dependencies:
   package_info_plus: ^3.0.1
   satisfied_version: ^0.1.0
   shared_preferences: ^2.0.15
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_test:

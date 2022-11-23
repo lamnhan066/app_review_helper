@@ -1,8 +1,9 @@
 import 'package:app_review/app_review.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:satisfied_version/satisfied_version.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AppReviewHelper {
   AppReviewHelper._internal();
@@ -10,6 +11,7 @@ class AppReviewHelper {
   /// Debug
   static bool _isDebug = false;
 
+  /// Open the store if available, if not, it'll try opening the `fallbackUrl`.
   static Future<void> openStore({String? fallbackUrl}) async {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -20,6 +22,10 @@ class AppReviewHelper {
         break;
       default:
         _print('The current platform does not support `openStore`');
+        if (fallbackUrl != null && await canLaunchUrlString(fallbackUrl)) {
+          _print('Open the fallbackUrl: $fallbackUrl');
+          await launchUrlString(fallbackUrl);
+        }
     }
   }
 
@@ -36,6 +42,10 @@ class AppReviewHelper {
     /// this value use plugin `satisfied_version` to compare.
     List<String> noRequestVersions = const [],
 
+    /// If true, it'll keep asking for the review on each new version (and satisfy with all the above conditions).
+    /// If false, it only requests for the first time the conditions are satisfied.
+    bool keepRemind = true,
+
     /// Request with delayed duaration
     Duration? duration,
 
@@ -50,6 +60,12 @@ class AppReviewHelper {
     }
 
     final prefs = await SharedPreferences.getInstance();
+
+    if (!keepRemind && (prefs.getBool('AppReviewHelper.Requested') ?? false)) {
+      _print('The review has been requested and the `keepRemind` was disabled');
+      return;
+    }
+
     final info = await PackageInfo.fromPlatform();
 
     // Compare version
@@ -64,7 +80,7 @@ class AppReviewHelper {
     // Compare with noRequestVersions
     if (info.version.satisfiedWith(noRequestVersions)) {
       _print(
-        'This version is satisfied with noRequestVersions => Don\'t request',
+        'This version is satisfied with `noRequestVersions` => Don\'t request',
       );
       return;
     }
@@ -100,7 +116,9 @@ class AppReviewHelper {
       _print('Satisfy with all conditions');
 
       if (!isDebug) {
-        final result = await AppReview.requestReviewDelayed(duration);
+        if (duration != null) await Future.delayed(duration);
+        final result = await AppReview.requestReview;
+
         _print('Review result: $result');
       } else {
         _print('AppReview.requestReview is called but in debug mode!');
