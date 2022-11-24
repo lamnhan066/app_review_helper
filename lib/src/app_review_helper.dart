@@ -13,6 +13,17 @@ class AppReviewHelper {
 
   /// Open the store if available, if not, it'll try opening the `fallbackUrl`.
   static Future<void> openStore({String? fallbackUrl}) async {
+    if (kIsWeb) {
+      if (fallbackUrl != null && await canLaunchUrlString(fallbackUrl)) {
+        _print('Open the fallbackUrl on Web platform: $fallbackUrl');
+        await launchUrlString(fallbackUrl);
+      } else {
+        _print('Web platform and fallbackUrl == null');
+      }
+
+      return;
+    }
+
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         await AppReview.openGooglePlay(fallbackUrl: fallbackUrl);
@@ -53,6 +64,11 @@ class AppReviewHelper {
     bool isDebug = !kReleaseMode,
   }) async {
     _isDebug = isDebug;
+
+    if (!kIsWeb) {
+      _print('Cannot request an in app review on Web platform');
+      return;
+    }
 
     if (!await AppReview.isRequestReviewAvailable) {
       _print('Cannot request an in app review at this time');
@@ -145,5 +161,5 @@ class AppReviewHelper {
 
   static void _print(Object? object) =>
       // ignore: avoid_print
-      _isDebug ? print('[ApppReviewHelper] $object') : null;
+      _isDebug ? debugPrint('[ApppReviewHelper] $object') : null;
 }
