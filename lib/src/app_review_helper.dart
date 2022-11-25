@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_review/app_review.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -65,8 +67,8 @@ class AppReviewHelper {
   }) async {
     _isDebug = isDebug;
 
-    if (!kIsWeb) {
-      _print('Cannot request an in app review on Web platform');
+    if (kIsWeb || (!Platform.isAndroid && !Platform.isIOS)) {
+      _print('This platform is not supported');
       return;
     }
 

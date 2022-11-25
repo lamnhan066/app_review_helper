@@ -4,6 +4,8 @@ This plugin will make it easier for you to use in-app review with minimal condit
 
 ## Usage
 
+This method will do nothing if the current platform is other than Android and iOS.
+
 ``` dart
 AppReviewHelper.initial(
     /// Min days
@@ -26,4 +28,10 @@ AppReviewHelper.initial(
     /// Print debug log
     isDebug: false,
 );
+```
+
+Use this function if you want to open the store. This function will try to open the `fallbackUrl` if the current platform is not Android or iOS.
+
+``` dart
+AppReviewHelper.openStore();
 ```

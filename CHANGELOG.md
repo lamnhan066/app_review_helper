@@ -1,3 +1,7 @@
+## 0.0.3+1
+
+* Do nothing for the platforms that are not Android and iOS, only `openStore` will launch if the `fallbackUrl` is available.
+
 ## 0.0.3
 
 * Added `keepRemind` parameter to disable the default behavior (default behavior is auto requests for the review on each new version), and it's `true` by default.
