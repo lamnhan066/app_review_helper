@@ -1,3 +1,9 @@
+## 0.1.0
+
+* **[BREAKING CHANGE]** Move from static method to instance:
+  * Before: `AppReviewHelper.initial()`
+  * Now: `AppReviewHelper.instance.initial()`
+
 ## 0.0.3+1
 
 * Do nothing for the platforms that are not Android and iOS, only `openStore` will launch if the `fallbackUrl` is available.

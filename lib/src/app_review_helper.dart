@@ -8,13 +8,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class AppReviewHelper {
+  static AppReviewHelper instance = AppReviewHelper._internal();
+
   AppReviewHelper._internal();
 
   /// Debug
-  static bool _isDebug = false;
+  bool _isDebug = false;
 
   /// Open the store if available, if not, it'll try opening the `fallbackUrl`.
-  static Future<void> openStore({String? fallbackUrl}) async {
+  Future<void> openStore({String? fallbackUrl}) async {
     if (kIsWeb) {
       if (fallbackUrl != null && await canLaunchUrlString(fallbackUrl)) {
         _print('Open the fallbackUrl on Web platform: $fallbackUrl');
@@ -44,7 +46,7 @@ class AppReviewHelper {
 
   /// This function will request an in-app review every time a new version is published
   /// and it satisfy with the conditions.
-  static Future<void> initial({
+  Future<void> initial({
     /// Min days
     int minDays = 3,
 
@@ -161,7 +163,7 @@ class AppReviewHelper {
     }
   }
 
-  static void _print(Object? object) =>
+  void _print(Object? object) =>
       // ignore: avoid_print
       _isDebug ? debugPrint('[ApppReviewHelper] $object') : null;
 }
