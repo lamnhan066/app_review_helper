@@ -1,3 +1,7 @@
+## 0.1.1
+
+* Use `in_app_review` instead of `app_review` package.
+
 ## 0.1.0
 
 * **[BREAKING CHANGE]** Move from static method to instance:

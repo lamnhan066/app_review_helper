@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:app_review/app_review.dart';
 import 'package:flutter/foundation.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:satisfied_version/satisfied_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:update_helper/update_helper.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class AppReviewHelper {
@@ -16,7 +17,7 @@ class AppReviewHelper {
   bool _isDebug = false;
 
   /// Open the store if available, if not, it'll try opening the `fallbackUrl`.
-  Future<void> openStore({String? fallbackUrl}) async {
+  Future<void> openStore({String? fallbackUrl, bool debugLog = false}) async {
     if (kIsWeb) {
       if (fallbackUrl != null && await canLaunchUrlString(fallbackUrl)) {
         _print('Open the fallbackUrl on Web platform: $fallbackUrl');
@@ -28,20 +29,7 @@ class AppReviewHelper {
       return;
     }
 
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        await AppReview.openGooglePlay(fallbackUrl: fallbackUrl);
-        break;
-      case TargetPlatform.iOS:
-        await AppReview.openAppStore(fallbackUrl: fallbackUrl);
-        break;
-      default:
-        _print('The current platform does not support `openStore`');
-        if (fallbackUrl != null && await canLaunchUrlString(fallbackUrl)) {
-          _print('Open the fallbackUrl: $fallbackUrl');
-          await launchUrlString(fallbackUrl);
-        }
-    }
+    await UpdateHelper.openStore(fallbackUrl: fallbackUrl, debugLog: debugLog);
   }
 
   /// This function will request an in-app review every time a new version is published
@@ -74,7 +62,7 @@ class AppReviewHelper {
       return;
     }
 
-    if (!await AppReview.isRequestReviewAvailable) {
+    if (!await InAppReview.instance.isAvailable()) {
       _print('Cannot request an in app review at this time');
       return;
     }
@@ -137,9 +125,9 @@ class AppReviewHelper {
 
       if (!isDebug) {
         if (duration != null) await Future.delayed(duration);
-        final result = await AppReview.requestReview;
+        await InAppReview.instance.requestReview();
 
-        _print('Review result: $result');
+        _print('Completed request review');
       } else {
         _print('AppReview.requestReview is called but in debug mode!');
       }
