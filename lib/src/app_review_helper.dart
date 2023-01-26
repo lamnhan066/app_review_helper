@@ -45,9 +45,12 @@ class AppReviewHelper {
     /// this value use plugin `satisfied_version` to compare.
     List<String> noRequestVersions = const [],
 
+    /// List of version that allow the app to remind the in-app review.
+    List<String> remindedVersions = const [],
+
     /// If true, it'll keep asking for the review on each new version (and satisfy with all the above conditions).
     /// If false, it only requests for the first time the conditions are satisfied.
-    bool keepRemind = true,
+    bool keepRemind = false,
 
     /// Request with delayed duaration
     Duration? duration,
@@ -68,13 +71,13 @@ class AppReviewHelper {
     }
 
     final prefs = await SharedPreferences.getInstance();
+    final info = await PackageInfo.fromPlatform();
 
+    keepRemind = keepRemind || info.version.satisfiedWith(remindedVersions);
     if (!keepRemind && (prefs.getBool('AppReviewHelper.Requested') ?? false)) {
       _print('The review has been requested and the `keepRemind` was disabled');
       return;
     }
-
-    final info = await PackageInfo.fromPlatform();
 
     // Compare version
     var prefVersion = prefs.getString('AppReviewHelper.Version') ?? '0.0.0';
@@ -123,7 +126,7 @@ class AppReviewHelper {
       prefs.setBool('AppReviewHelper.Requested', true);
       _print('Satisfy with all conditions');
 
-      if (!isDebug) {
+      if (kReleaseMode || Platform.isIOS) {
         if (duration != null) await Future.delayed(duration);
         await InAppReview.instance.requestReview();
 

@@ -19,6 +19,9 @@ appReviewHelper.initial(
     /// this value use plugin `satisfied_version` to compare.
     noRequestVersions: ['<=1.0.0', '3.0.0', '>4.0.0'],
 
+    /// Control which versions allow reminding if `keepRemind` is false
+    remindedVersions: ['2.0.0', '3.0.0'],
+
     /// If true, it'll keep asking for the review on each new version (and satisfy with all the above conditions).
     /// If false, it only requests for the first time the conditions are satisfied.
     keepRemind: true,

@@ -1,3 +1,8 @@
+## 0.2.0
+
+* **[BREAKING CHANGE]** Change `keepRemind` default value to `false`.
+* Add `remindedVersions` parameter to control the version to allow reminding.
+
 ## 0.1.1
 
 * Use `in_app_review` instead of `app_review` package.
