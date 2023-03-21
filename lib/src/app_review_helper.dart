@@ -114,7 +114,7 @@ class AppReviewHelper {
     final firstDateTime = DateTime.tryParse(firstDateTimeString);
     final now = DateTime.now();
     final days =
-        firstDateTime == null ? 0 : firstDateTime.difference(now).inDays;
+        firstDateTime == null ? 0 : now.difference(firstDateTime).inDays;
 
     // Print debug
     _print('prefs version: $prefVersion, currentVersion: ${info.version}');

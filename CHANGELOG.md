@@ -1,3 +1,7 @@
+## 0.2.1
+
+* [BUG] Fixed the way calculating `minDays`.
+
 ## 0.2.0
 
 * **[BREAKING CHANGE]** Change `keepRemind` default value to `false`.
