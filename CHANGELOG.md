@@ -1,3 +1,8 @@
+## 0.3.0
+
+* Update dependencies.
+* Update dart sdk to ">=2.18.0 <3.0.0`, flutter min sdk to "3.3.0".
+
 ## 0.2.1
 
 * [BUG] Fixed the way calculating `minDays`.
