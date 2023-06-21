@@ -1,5 +1,7 @@
-import 'dart:io';
-
+import 'package:app_review_helper/src/models/review_dialog_config.dart';
+import 'package:app_review_helper/src/models/review_mock.dart';
+import 'package:app_review_helper/src/models/review_result.dart';
+import 'package:app_review_helper/src/review.dart';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -10,6 +12,10 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class AppReviewHelper {
   static AppReviewHelper instance = AppReviewHelper._internal();
+  static ReviewMock? _mock;
+
+  /// Set mock values.
+  static void setMockInitialValues([ReviewMock? mock]) => _mock = mock;
 
   AppReviewHelper._internal();
 
@@ -34,7 +40,13 @@ class AppReviewHelper {
 
   /// This function will request an in-app review every time a new version is published
   /// and it satisfy with the conditions.
-  Future<void> initial({
+  Future<ReviewResult> initial({
+    /// Show the dialog with thump up - down to let the user to choose before
+    /// requesting a review. Only request a review if the thump up is chosen.
+    /// If not, the dialog with text field will be shown to get the review
+    /// from user.
+    ReviewDialogConfig? reviewDialogConfig,
+
     /// Min days
     int minDays = 3,
 
@@ -60,40 +72,36 @@ class AppReviewHelper {
   }) async {
     _isDebug = isDebug;
 
-    if (kIsWeb || (!Platform.isAndroid && !Platform.isIOS)) {
-      _print('This platform is not supported');
-      return;
+    final supportedPlatform =
+        (defaultTargetPlatform == TargetPlatform.android ||
+                defaultTargetPlatform == TargetPlatform.iOS) &&
+            !kIsWeb;
+    if (!supportedPlatform) {
+      return _print(ReviewResult.unSupportedPlatform)!;
     }
 
-    if (!await InAppReview.instance.isAvailable()) {
-      _print('Cannot request an in app review at this time');
-      return;
+    final isAvailable = _mock != null
+        ? _mock?.inAppReviewForceState == true
+        : await InAppReview.instance.isAvailable();
+
+    if (!isAvailable) {
+      return _print(ReviewResult.unavailable)!;
     }
 
     final prefs = await SharedPreferences.getInstance();
     final info = await PackageInfo.fromPlatform();
 
-    keepRemind = keepRemind || info.version.satisfiedWith(remindedVersions);
-    if (!keepRemind && (prefs.getBool('AppReviewHelper.Requested') ?? false)) {
-      _print('The review has been requested and the `keepRemind` was disabled');
-      return;
-    }
-
     // Compare version
-    var prefVersion = prefs.getString('AppReviewHelper.Version') ?? '0.0.0';
-    if (prefVersion == info.version) {
-      if (prefs.getBool('AppReviewHelper.Requested') ?? false) {
-        _print('This version has been requested an in app review');
-        return;
+    if (prefs.getBool('AppReviewHelper.Requested') ?? false) {
+      keepRemind = keepRemind || info.version.satisfiedWith(remindedVersions);
+      if (!keepRemind) {
+        return _print(ReviewResult.keepRemindDisabled)!;
       }
     }
 
     // Compare with noRequestVersions
     if (info.version.satisfiedWith(noRequestVersions)) {
-      _print(
-        'This version is satisfied with `noRequestVersions` => Don\'t request',
-      );
-      return;
+      return _print(ReviewResult.noRequestVersion)!;
     }
 
     // Get data from prefs
@@ -103,6 +111,7 @@ class AppReviewHelper {
         prefs.getString('AppReviewHelper.FirstDateTime') ?? '';
 
     // Reset variables
+    var prefVersion = prefs.getString('AppReviewHelper.Version') ?? '0.0.0';
     if (prefVersion != info.version) {
       callThisFunction = 0;
       firstDateTimeString = '';
@@ -111,10 +120,27 @@ class AppReviewHelper {
 
     // Increase data
     callThisFunction += 1;
-    final firstDateTime = DateTime.tryParse(firstDateTimeString);
-    final now = DateTime.now();
-    final days =
-        firstDateTime == null ? 0 : now.difference(firstDateTime).inDays;
+    DateTime? firstDateTime = DateTime.tryParse(firstDateTimeString);
+    DateTime now = DateTime.now();
+    int days = firstDateTime == null ? 0 : now.difference(firstDateTime).inDays;
+
+    // Save data back to prefs
+    prefs.setString('AppReviewHelper.Version', info.version);
+    prefs.setInt('AppReviewHelper.CallThisFunction', callThisFunction);
+    if (firstDateTime == null) {
+      prefs.setString(
+        'AppReviewHelper.FirstDateTime',
+        now.toIso8601String(),
+      );
+    }
+
+    // Mock values
+    if (_mock != null) {
+      callThisFunction = _mock!.callThisFunction;
+      firstDateTime = _mock!.firstDateTime;
+      now = _mock!.nowDateTime;
+      days = now.difference(firstDateTime).inDays;
+    }
 
     // Print debug
     _print('prefs version: $prefVersion, currentVersion: ${info.version}');
@@ -126,35 +152,31 @@ class AppReviewHelper {
       prefs.setBool('AppReviewHelper.Requested', true);
       _print('Satisfy with all conditions');
 
-      if (kReleaseMode || Platform.isIOS) {
+      if (!isDebug) {
         if (duration != null) await Future.delayed(duration);
-        await InAppReview.instance.requestReview();
 
-        _print('Completed request review');
+        // Only call review when not mocking.
+        if (_mock == null) await review(reviewDialogConfig);
+
+        return _print(ReviewResult.completed)!;
       } else {
-        _print('AppReview.requestReview is called but in debug mode!');
+        return _print(ReviewResult.compeletedInDebugMode)!;
       }
     } else {
       if (callThisFunction < minCallThisFunction) {
-        _print('Don\'t satisfy with minCallThisFunction condition');
+        return _print(ReviewResult.dontSatisfyWithMinCallThisFunction)!;
       }
-      if (days < minDays) {
-        _print('Don\'t satisfy with minDays condition');
-      }
-    }
 
-    // Save data back to prefs
-    prefs.setString('AppReviewHelper.Version', info.version);
-    prefs.setInt('AppReviewHelper.CallThisFunction', callThisFunction);
-    if (firstDateTime == null) {
-      prefs.setString(
-        'AppReviewHelper.FirstDateTime',
-        now.toIso8601String(),
-      );
+      return _print(ReviewResult.dontSatisfyWithMinDays)!;
     }
   }
 
-  void _print(Object? object) =>
-      // ignore: avoid_print
-      _isDebug ? debugPrint('[ApppReviewHelper] $object') : null;
+  ReviewResult? _print(Object log) {
+    if (log is ReviewResult) {
+      _isDebug ? debugPrint('[ApppReviewHelper] ${log.text}') : null;
+      return log;
+    }
+    _isDebug ? debugPrint('[ApppReviewHelper] $log') : null;
+    return null;
+  }
 }
