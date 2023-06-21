@@ -2,6 +2,11 @@
 
 This plugin will make it easier for you to use in-app review with minimal conditions.
 
+## Introduction
+
+The dialogs is shown before requesting a review
+![Alt Text](https://raw.githubusercontent.com/vnniz/app_review_helper/main/assets/intro/ReviewHelperComment.webm)
+
 ## Usage
 
 This method will do nothing if the current platform is other than Android and iOS.
@@ -9,6 +14,17 @@ This method will do nothing if the current platform is other than Android and iO
 ``` dart
 final appReviewHelper = AppReviewHelper.instance;
 appReviewHelper.initial(
+    /// Show a dialog to ask the user about their feeling before the review.
+    /// If the user does not satisfy with the first dialog, the second dialog
+    /// will be shown (if `whatCanWeDo` is set) to ask user's opinion to make
+    /// the app better. 
+    reviewDialogConfig: ReviewDialogConfig(
+        context: context,
+        whatCanWeDo: (comment) {
+            print(comment);
+        },
+    ),
+
     /// Min days
     minDays: 3,
 

@@ -1,7 +1,14 @@
+## 0.4.0.rc1
+
+* Add dialogs to ask users about their opinions before requesting the review.
+* Improve code logic.
+* Add tests.
+* Add example.
+
 ## 0.3.0
 
 * Update dependencies.
-* Update dart sdk to ">=2.18.0 <3.0.0`, flutter min sdk to "3.3.0".
+* Update dart sdk to ">=2.18.0 <4.0.0`, flutter min sdk to "3.3.0".
 
 ## 0.2.1
 

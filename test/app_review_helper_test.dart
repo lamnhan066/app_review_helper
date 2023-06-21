@@ -1,6 +1,5 @@
 import 'package:app_review_helper/app_review_helper.dart';
 import 'package:app_review_helper/src/models/review_mock.dart';
-import 'package:app_review_helper/src/models/review_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

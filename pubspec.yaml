@@ -3,6 +3,10 @@ description: This plugin will make it easier for you to use in-app review with m
 version: 0.3.0
 homepage: https://github.com/vursin/app_review_helper
 
+screenshots:
+  - description: "Introduction"
+    path: assets/intro/ReviewHelperComment.webm
+
 environment:
   sdk: ">=2.18.0 <4.0.0"
   flutter: ">=3.3.0"
