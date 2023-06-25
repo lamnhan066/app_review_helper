@@ -1,3 +1,7 @@
+## 0.4.0-rc.2
+
+* Update dependencies.
+
 ## 0.4.0-rc.1
 
 * Add dialogs to ask users about their opinions before requesting the review.

@@ -20,8 +20,8 @@ appReviewHelper.initial(
     /// the app better. 
     reviewDialogConfig: ReviewDialogConfig(
         context: context,
-        whatCanWeDo: (comment) {
-            print(comment);
+        whatCanWeDo: (opinion) {
+            print(opinion);
         },
     ),
 
