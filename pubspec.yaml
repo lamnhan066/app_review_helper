@@ -1,11 +1,11 @@
 name: app_review_helper
 description: This plugin will make it easier for you to use in-app review with minimal conditions.
-version: 0.4.0-rc.2
+version: 0.4.1
 homepage: https://github.com/vnniz/app_review_helper
 
 screenshots:
   - description: "Introduction"
-    path: assets/intro/ReviewHelperComment.webm
+    path: assets/intro/ReviewHelperComment.webp
 
 environment:
   sdk: ">=2.18.0 <4.0.0"
@@ -16,7 +16,7 @@ dependencies:
     sdk: flutter
   package_info_plus: ^4.0.2
   satisfied_version: ^0.1.0+2
-  shared_preferences: ^2.1.2
+  shared_preferences: ^2.2.0
   url_launcher: ^6.1.7
   in_app_review: ^2.0.6
   update_helper: ^0.3.0

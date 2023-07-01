@@ -1,3 +1,8 @@
+## 0.4.1
+
+* Update dependencies.
+* Update screenshots.
+
 ## 0.4.0-rc.2
 
 * Update dependencies.
