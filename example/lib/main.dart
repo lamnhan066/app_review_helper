@@ -25,8 +25,9 @@ class _MyAppState extends State<MyApp> {
     instance.initial(
       reviewDialogConfig: ReviewDialogConfig(
         context: context,
-        whatCanWeDo: (comment) {
-          print(comment);
+        whatCanWeDo: (opinion) {
+          /// You can save this user's opinion to your database
+          print(opinion);
         },
       ),
       minCallThisFunction: 0,
