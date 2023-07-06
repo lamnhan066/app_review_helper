@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
       minCallThisFunction: 0,
       minDays: 0,
       keepRemind: true,
-      isDebug: true,
+      isDebug: false,
     );
   }
 
