@@ -1,3 +1,7 @@
+## 0.4.3
+
+* Add anonymous text under text field of the opinion dialog.
+
 ## 0.4.2
 
 * Improves pub scores.
