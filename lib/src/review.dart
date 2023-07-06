@@ -29,6 +29,7 @@ Future<bool> review(ReviewDialogConfig? config) async {
       cancelButtonText: config.cancelButtonText,
       submitButtonText: config.submitButtonText,
       whatCanWeDoText: config.whatCanWeDoText,
+      anonymousText: config.anonymousText,
     );
 
     if (result != '') config.whatCanWeDo!(result);
@@ -103,6 +104,7 @@ Future<String> whatCanWeDoDialog(
   required String whatCanWeDoText,
   required String submitButtonText,
   required String cancelButtonText,
+  required String anonymousText,
 }) async {
   String text = '';
   final isSubmit = await showDialog<bool>(
@@ -128,6 +130,19 @@ Future<String> whatCanWeDoDialog(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.all(8.0),
                 isDense: true,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                anonymousText,
+                style: const TextStyle(
+                  fontSize: 10,
+                  // fontStyle: FontStyle.italic,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.left,
               ),
             ),
             const SizedBox(height: 20),

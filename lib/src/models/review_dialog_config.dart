@@ -26,6 +26,9 @@ class ReviewDialogConfig {
   /// "Cancel"
   final String cancelButtonText;
 
+  /// "Completely anonymous"
+  final String anonymousText;
+
   ReviewDialogConfig({
     required this.context,
     this.isUsefulText = 'How do you feel about this app?',
@@ -36,5 +39,6 @@ class ReviewDialogConfig {
         'Please let us know what we can do to improve this app:',
     this.submitButtonText = 'Submit',
     this.cancelButtonText = 'Cancel',
+    this.anonymousText = 'Completely anonymous',
   });
 }
