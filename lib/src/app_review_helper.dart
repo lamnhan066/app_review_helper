@@ -174,12 +174,12 @@ class AppReviewHelper {
   ReviewResult? _print(Object log) {
     if (log is ReviewResult) {
       if (_isDebug) {
-        debugPrint('[ApppReviewHelper] ${log.text}');
+        debugPrint('[App Review Helper] ${log.text}');
       }
       return log;
     }
     if (_isDebug) {
-      debugPrint('[ApppReviewHelper] $log');
+      debugPrint('[App Review Helper] $log');
     }
     return null;
   }
