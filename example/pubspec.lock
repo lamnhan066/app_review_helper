@@ -7,7 +7,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.4.3"
+    version: "0.5.0"
   async:
     dependency: transitive
     description:
@@ -48,6 +48,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.1"
+  conditional_trigger:
+    dependency: transitive
+    description:
+      name: conditional_trigger
+      sha256: "306700248c90df1da3fc79a5514ebc9b9d21d431ad181c5bc13c9187788550e8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -107,10 +115,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "4c3f04bfb64d3efd508d06b41b825542f08122d30bda4933fb95c069d22a4fa3"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   http_parser:
     dependency: transitive
     description:
@@ -251,10 +259,10 @@ packages:
     dependency: transitive
     description:
       name: satisfied_version
-      sha256: "9fa93ef669721dfb81e932ddba9b0e5a709646d57d2849e34d2cd32ccb6b3306"
+      sha256: d538c2db18f7f3b674895f1a8b56564d16759317da60a3960e74d0277e50eda2
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0+2"
+    version: "0.2.0"
   shared_preferences:
     dependency: transitive
     description:
@@ -384,18 +392,18 @@ packages:
     dependency: transitive
     description:
       name: update_helper
-      sha256: dfc6f1c8d8b81ec7ce4dad9beb7086a3c9a8371e33a7957a213dbf836ea8f9c6
+      sha256: "521e517140243fcb4141c513b51795932887febf3ee50b2cec489c1db9d02da5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.0"
   url_launcher:
     dependency: transitive
     description:
       name: url_launcher
-      sha256: eb1e00ab44303d50dd487aab67ebc575456c146c6af44422f9c13889984c00f3
+      sha256: "781bd58a1eb16069412365c98597726cd8810ae27435f04b3b4d3a470bacd61e"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.11"
+    version: "6.1.12"
   url_launcher_android:
     dependency: transitive
     description:
@@ -478,4 +486,4 @@ packages:
     version: "0.2.0+2"
 sdks:
   dart: ">=3.0.0 <4.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.10.0"

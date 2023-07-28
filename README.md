@@ -50,6 +50,37 @@ appReviewHelper.initial(
 );
 ```
 
+Return values:
+
+``` dart
+/// This platform is not supported
+ReviewState.unSupportedPlatform
+
+/// Cannot request an in app review at this time
+ReviewState.unavailable
+
+///The review has been requested and the `keepRemind` was disabled
+ReviewState.keepRemindDisabled
+
+/// This version is satisfied with `noRequestVersions` => Don't request
+ReviewState.noRequestVersion
+
+/// Completed request review
+ReviewState.completed
+
+/// AppReview.requestReview is called but in debug mode!
+ReviewState.compeletedInDebugMode
+
+/// Don\'t satisfy with minCalls and minDays condition
+ReviewState.dontSatisfyWithMinCallsAndDays
+
+/// Don't satisfy with minCalls condition
+ReviewState.dontSatisfyWithMinCalls
+
+/// Don't satisfy with minDays condition
+ReviewState.dontSatisfyWithMinDays
+```
+
 Use this function if you want to open the store. This function will try to open the `fallbackUrl` if the current platform is not Android or iOS.
 
 ``` dart

@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
           print(opinion);
         },
       ),
-      minCallThisFunction: 0,
+      minCalls: 0,
       minDays: 0,
       keepRemind: true,
       isDebug: false,

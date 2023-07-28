@@ -1,3 +1,11 @@
+## 0.5.0
+
+* Rename from `ReviewResult` to `ReviewState` and:
+  * Rename from `minCallThisFunction` to `minCalls`.
+  * Rename `dontSatisfyWithMinCallThisFunction` to `dontSatisfyWithMinCalls`.
+  * Add `dontSatisfyWithMinCallsAndDays`.
+* Bump dependencies.
+
 ## 0.4.3
 
 * Add anonymous text under text field of the opinion dialog.
