@@ -1,21 +1,21 @@
 import 'package:app_review_helper/src/models/review_dialog_config.dart';
-import 'package:app_review_helper/src/models/review_mock.dart';
 import 'package:app_review_helper/src/models/review_result.dart';
-import 'package:app_review_helper/src/review.dart';
+import 'package:conditional_trigger/conditional_trigger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:satisfied_version/satisfied_version.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:update_helper/update_helper.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import 'models/review_mock.dart';
 
 class AppReviewHelper {
   static AppReviewHelper instance = AppReviewHelper._internal();
   static ReviewMock? _mock;
 
   /// Set mock values.
-  static void setMockInitialValues([ReviewMock? mock]) => _mock = mock;
+  static void setMockInitialValues([ReviewMock? mock]) {
+    _mock = mock;
+  }
 
   AppReviewHelper._internal();
 
@@ -51,7 +51,7 @@ class AppReviewHelper {
     int minDays = 3,
 
     /// If you add this line in your main(), it's same as app opening count
-    int minCallThisFunction = 3,
+    int minCalls = 3,
 
     /// If the current version is satisfied with this than not showing the request
     /// this value use plugin `satisfied_version` to compare.
@@ -88,86 +88,36 @@ class AppReviewHelper {
       return _print(ReviewResult.unavailable)!;
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    final info = await PackageInfo.fromPlatform();
+    final condition = ConditionalTrigger(
+      'AppReviewHelper',
+      minDays: minDays,
+      minCalls: minCalls,
+      noRequestVersions: noRequestVersions,
+      remindedVersions: remindedVersions,
+      keepRemind: keepRemind,
+      debugLog: isDebug,
+    );
 
-    // Compare version
-    if (prefs.getBool('AppReviewHelper.Requested') ?? false) {
-      keepRemind = keepRemind || info.version.satisfiedWith(remindedVersions);
-      if (!keepRemind) {
+    condition.setMockInitialValues(_mock);
+
+    switch (await condition.check()) {
+      case ConditionalState.keepRemindDisabled:
         return _print(ReviewResult.keepRemindDisabled)!;
-      }
-    }
-
-    // Compare with noRequestVersions
-    if (info.version.satisfiedWith(noRequestVersions)) {
-      return _print(ReviewResult.noRequestVersion)!;
-    }
-
-    // Get data from prefs
-    var callThisFunction =
-        prefs.getInt('AppReviewHelper.CallThisFunction') ?? 0;
-    var firstDateTimeString =
-        prefs.getString('AppReviewHelper.FirstDateTime') ?? '';
-
-    // Reset variables
-    var prefVersion = prefs.getString('AppReviewHelper.Version') ?? '0.0.0';
-    if (prefVersion != info.version) {
-      callThisFunction = 0;
-      firstDateTimeString = '';
-      prefs.setBool('AppReviewHelper.Requested', false);
-    }
-
-    // Increase data
-    callThisFunction += 1;
-    DateTime? firstDateTime = DateTime.tryParse(firstDateTimeString);
-    DateTime now = DateTime.now();
-    int days = firstDateTime == null ? 0 : now.difference(firstDateTime).inDays;
-
-    // Save data back to prefs
-    prefs.setString('AppReviewHelper.Version', info.version);
-    prefs.setInt('AppReviewHelper.CallThisFunction', callThisFunction);
-    if (firstDateTime == null) {
-      prefs.setString(
-        'AppReviewHelper.FirstDateTime',
-        now.toIso8601String(),
-      );
-    }
-
-    // Mock values
-    if (_mock != null) {
-      callThisFunction = _mock!.callThisFunction;
-      firstDateTime = _mock!.firstDateTime;
-      now = _mock!.nowDateTime;
-      days = now.difference(firstDateTime).inDays;
-    }
-
-    // Print debug
-    _print('prefs version: $prefVersion, currentVersion: ${info.version}');
-    _print('Call this function $callThisFunction times');
-    _print('First time open this app was $days days before');
-
-    // Compare
-    if (callThisFunction >= minCallThisFunction && days >= minDays) {
-      prefs.setBool('AppReviewHelper.Requested', true);
-      _print('Satisfy with all conditions');
-
-      if (!isDebug) {
-        if (duration != null) await Future.delayed(duration);
-
-        // Only call review when not mocking.
-        if (_mock == null) await review(reviewDialogConfig);
-
-        return _print(ReviewResult.completed)!;
-      } else {
-        return _print(ReviewResult.compeletedInDebugMode)!;
-      }
-    } else {
-      if (callThisFunction < minCallThisFunction) {
-        return _print(ReviewResult.dontSatisfyWithMinCallThisFunction)!;
-      }
-
-      return _print(ReviewResult.dontSatisfyWithMinDays)!;
+      case ConditionalState.noRequestVersion:
+        return _print(ReviewResult.noRequestVersion)!;
+      case ConditionalState.dontSatisfyWithMinCallsAndDays:
+        return _print(ReviewResult.dontSatisfyWithMinCallsAndDays)!;
+      case ConditionalState.dontSatisfyWithMinCalls:
+        return _print(ReviewResult.dontSatisfyWithMinCalls)!;
+      case ConditionalState.dontSatisfyWithMinDays:
+        return _print(ReviewResult.dontSatisfyWithMinDays)!;
+      case ConditionalState.satisfied:
+        if (!isDebug) {
+          if (duration != null) await Future.delayed(duration);
+          return _print(ReviewResult.completed)!;
+        } else {
+          return _print(ReviewResult.compeletedInDebugMode)!;
+        }
     }
   }
 

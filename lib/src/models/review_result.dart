@@ -4,13 +4,13 @@ enum ReviewResult {
   unavailable('Cannot request an in app review at this time'),
   keepRemindDisabled(
       'The review has been requested and the `keepRemind` was disabled'),
-  // alreadyRequested('This version has been requested an in app review'),
   noRequestVersion(
       'This version is satisfied with `noRequestVersions` => Don\'t request'),
   completed('Completed request review'),
   compeletedInDebugMode('AppReview.requestReview is called but in debug mode!'),
-  dontSatisfyWithMinCallThisFunction(
-      'Don\'t satisfy with minCallThisFunction condition'),
+  dontSatisfyWithMinCallsAndDays(
+      'Don\'t satisfy with minCalls and minDays condition'),
+  dontSatisfyWithMinCalls('Don\'t satisfy with minCalls condition'),
   dontSatisfyWithMinDays('Don\'t satisfy with minDays condition');
 
   final String text;
