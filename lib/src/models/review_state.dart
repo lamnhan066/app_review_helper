@@ -1,5 +1,5 @@
 /// Result of the review request.
-enum ReviewResult {
+enum ReviewState {
   unSupportedPlatform('This platform is not supported'),
   unavailable('Cannot request an in app review at this time'),
   keepRemindDisabled(
@@ -14,5 +14,5 @@ enum ReviewResult {
   dontSatisfyWithMinDays('Don\'t satisfy with minDays condition');
 
   final String text;
-  const ReviewResult(this.text);
+  const ReviewState(this.text);
 }

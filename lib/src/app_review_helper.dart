@@ -1,5 +1,5 @@
 import 'package:app_review_helper/src/models/review_dialog_config.dart';
-import 'package:app_review_helper/src/models/review_result.dart';
+import 'package:app_review_helper/src/models/review_state.dart';
 import 'package:conditional_trigger/conditional_trigger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -40,7 +40,7 @@ class AppReviewHelper {
 
   /// This function will request an in-app review every time a new version is published
   /// and it satisfy with the conditions.
-  Future<ReviewResult> initial({
+  Future<ReviewState> initial({
     /// Show the dialog with thump up - down to let the user to choose before
     /// requesting a review. Only request a review if the thump up is chosen.
     /// If not, the dialog with text field will be shown to get the review
@@ -77,7 +77,7 @@ class AppReviewHelper {
                 defaultTargetPlatform == TargetPlatform.iOS) &&
             !kIsWeb;
     if (!supportedPlatform) {
-      return _print(ReviewResult.unSupportedPlatform)!;
+      return _print(ReviewState.unSupportedPlatform)!;
     }
 
     final isAvailable = _mock != null
@@ -85,7 +85,7 @@ class AppReviewHelper {
         : await InAppReview.instance.isAvailable();
 
     if (!isAvailable) {
-      return _print(ReviewResult.unavailable)!;
+      return _print(ReviewState.unavailable)!;
     }
 
     final condition = ConditionalTrigger(
@@ -102,27 +102,27 @@ class AppReviewHelper {
 
     switch (await condition.check()) {
       case ConditionalState.keepRemindDisabled:
-        return _print(ReviewResult.keepRemindDisabled)!;
+        return _print(ReviewState.keepRemindDisabled)!;
       case ConditionalState.noRequestVersion:
-        return _print(ReviewResult.noRequestVersion)!;
+        return _print(ReviewState.noRequestVersion)!;
       case ConditionalState.dontSatisfyWithMinCallsAndDays:
-        return _print(ReviewResult.dontSatisfyWithMinCallsAndDays)!;
+        return _print(ReviewState.dontSatisfyWithMinCallsAndDays)!;
       case ConditionalState.dontSatisfyWithMinCalls:
-        return _print(ReviewResult.dontSatisfyWithMinCalls)!;
+        return _print(ReviewState.dontSatisfyWithMinCalls)!;
       case ConditionalState.dontSatisfyWithMinDays:
-        return _print(ReviewResult.dontSatisfyWithMinDays)!;
+        return _print(ReviewState.dontSatisfyWithMinDays)!;
       case ConditionalState.satisfied:
         if (!isDebug) {
           if (duration != null) await Future.delayed(duration);
-          return _print(ReviewResult.completed)!;
+          return _print(ReviewState.completed)!;
         } else {
-          return _print(ReviewResult.compeletedInDebugMode)!;
+          return _print(ReviewState.compeletedInDebugMode)!;
         }
     }
   }
 
-  ReviewResult? _print(Object log) {
-    if (log is ReviewResult) {
+  ReviewState? _print(Object log) {
+    if (log is ReviewState) {
       if (_isDebug) {
         debugPrint('[App Review Helper] ${log.text}');
       }
