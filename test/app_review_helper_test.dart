@@ -25,85 +25,104 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     });
 
-    test('ReviewResult.notSupportedPlatform', () async {
+    test('ReviewState.notSupportedPlatform', () async {
       debugDefaultTargetPlatformOverride = TargetPlatform.windows;
       final returned = await instance.initial();
-      expect(returned, ReviewResult.unSupportedPlatform);
+      expect(returned, ReviewState.unSupportedPlatform);
     });
 
-    test('ReviewResult.unavailable', () async {
+    test('ReviewState.unavailable', () async {
       AppReviewHelper.setMockInitialValues(
           ReviewMock(inAppReviewForceState: false));
       final returned = await instance.initial();
-      expect(returned, ReviewResult.unavailable);
+      expect(returned, ReviewState.unavailable);
     });
 
-    test('ReviewResult.keepRemindDisabled', () async {
-      SharedPreferences.setMockInitialValues(
-        {'AppReviewHelper.Requested': true},
-      );
+    test('ReviewState.keepRemindDisabled', () async {
+      AppReviewHelper.setMockInitialValues(ReviewMock(
+        appVersion: '1.0.0',
+        inAppReviewForceState: true,
+        isRequested: true,
+      ));
+
+      final returned1 = await instance.initial();
+      expect(returned1, ReviewState.keepRemindDisabled);
+      final returned2 = await instance.initial(keepRemind: true);
+      expect(returned2, isNot(ReviewState.keepRemindDisabled));
+      final returned3 = await instance.initial(remindedVersions: ['1.0.0']);
+      expect(returned3, isNot(ReviewState.keepRemindDisabled));
+    });
+
+    test('ReviewState.noRequestVersion', () async {
       AppReviewHelper.setMockInitialValues(ReviewMock(
         appVersion: '1.0.0',
         inAppReviewForceState: true,
       ));
-
-      final returned1 = await instance.initial();
-      expect(returned1, ReviewResult.keepRemindDisabled);
-      final returned2 = await instance.initial(keepRemind: true);
-      expect(returned2, isNot(ReviewResult.keepRemindDisabled));
-      final returned3 = await instance.initial(remindedVersions: ['1.0.0']);
-      expect(returned3, isNot(ReviewResult.keepRemindDisabled));
-    });
-
-    test('ReviewResult.noRequestVersion', () async {
-      AppReviewHelper.setMockInitialValues(ReviewMock(appVersion: '1.0.0'));
       final returned = await instance.initial(noRequestVersions: ['1.0.0']);
-      expect(returned, ReviewResult.noRequestVersion);
+      expect(returned, ReviewState.noRequestVersion);
     });
 
-    test('ReviewResult.dontSatisfyWithMinCallThisFunction', () async {
-      AppReviewHelper.setMockInitialValues(
-          ReviewMock(callThisFunction: 0, firstDateTime: DateTime(0)));
-      final returned = await instance.initial(minCallThisFunction: 2);
-      expect(returned, ReviewResult.dontSatisfyWithMinCallThisFunction);
+    test('ReviewState.dontSatisfyWithMinCallThisFunctionAndDays', () async {
+      AppReviewHelper.setMockInitialValues(ReviewMock(
+        callThisFunction: 0,
+        firstDateTime: DateTime.now(),
+        inAppReviewForceState: true,
+      ));
+      final returned = await instance.initial(minCalls: 2, minDays: 2);
+      expect(returned, ReviewState.dontSatisfyWithMinCallsAndDays);
     });
 
-    test('ReviewResult.dontSatisfyWithMinDays', () async {
-      AppReviewHelper.setMockInitialValues(
-          ReviewMock(callThisFunction: 5, firstDateTime: DateTime.now()));
-      final returned =
-          await instance.initial(minDays: 2, minCallThisFunction: 3);
-      expect(returned, ReviewResult.dontSatisfyWithMinDays);
+    test('ReviewState.dontSatisfyWithMinCallThisFunction', () async {
+      AppReviewHelper.setMockInitialValues(ReviewMock(
+        callThisFunction: 0,
+        firstDateTime: DateTime(0),
+        inAppReviewForceState: true,
+      ));
+      final returned = await instance.initial(minCalls: 2);
+      expect(returned, ReviewState.dontSatisfyWithMinCalls);
     });
 
-    test('ReviewResult.completed', () async {
+    test('ReviewState.dontSatisfyWithMinDays', () async {
+      AppReviewHelper.setMockInitialValues(ReviewMock(
+        callThisFunction: 5,
+        firstDateTime: DateTime.now(),
+        nowDateTime: DateTime.now(),
+        inAppReviewForceState: true,
+      ));
+      final returned = await instance.initial(minDays: 2, minCalls: 3);
+      expect(returned, ReviewState.dontSatisfyWithMinDays);
+    });
+
+    test('ReviewState.completed', () async {
       AppReviewHelper.setMockInitialValues(
         ReviewMock(
           callThisFunction: 5,
           firstDateTime: DateTime.now().subtract(const Duration(days: 5)),
+          inAppReviewForceState: true,
         ),
       );
       final returned = await instance.initial(
-        minCallThisFunction: 5,
+        minCalls: 5,
         minDays: 5,
         isDebug: false,
       );
-      expect(returned, ReviewResult.completed);
+      expect(returned, ReviewState.completed);
     });
 
-    test('ReviewResult.compeletedInDebugMode', () async {
+    test('ReviewState.compeletedInDebugMode', () async {
       AppReviewHelper.setMockInitialValues(
         ReviewMock(
           callThisFunction: 5,
           firstDateTime: DateTime.now().subtract(const Duration(days: 5)),
+          inAppReviewForceState: true,
         ),
       );
       final returned = await instance.initial(
-        minCallThisFunction: 5,
+        minCalls: 5,
         minDays: 5,
         isDebug: true,
       );
-      expect(returned, ReviewResult.compeletedInDebugMode);
+      expect(returned, ReviewState.compeletedInDebugMode);
     });
   });
 
