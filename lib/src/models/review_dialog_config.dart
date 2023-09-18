@@ -29,7 +29,7 @@ class ReviewDialogConfig {
   /// "Completely anonymous"
   final String anonymousText;
 
-  ReviewDialogConfig({
+  const ReviewDialogConfig({
     required this.context,
     this.isUsefulText = 'How do you feel about this app?',
     this.likeText = 'Like',

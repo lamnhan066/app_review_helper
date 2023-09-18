@@ -1,3 +1,7 @@
+## 0.6.0
+
+* Bump dependencies.
+
 ## 0.5.0
 
 * Rename from `ReviewResult` to `ReviewState` and:
