@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'models/review_mock.dart';
 
 class AppReviewHelper {
+  /// Get AppReviewHelper instance.
   static AppReviewHelper instance = AppReviewHelper._internal();
   static ReviewMock? _mock;
 

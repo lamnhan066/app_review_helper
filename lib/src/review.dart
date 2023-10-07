@@ -2,14 +2,16 @@ import 'package:app_review_helper/src/models/review_dialog_config.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 
-/// true: show review
-/// false: don't show review
+/// If this [config] is set, the pre-dialog will be shown before showing the
+/// request review dialog. Returns `true` if the review dialog is shown, `false`
+/// will be shown otherwise.
 Future<bool> review(ReviewDialogConfig? config) async {
   if (config == null) {
     await InAppReview.instance.requestReview();
     return true;
   }
 
+  // Show the how do you feel dialog.
   final isUseful = await howYouFeelDialog(
     config.context,
     isUsefulText: config.isUsefulText,
@@ -22,6 +24,7 @@ Future<bool> review(ReviewDialogConfig? config) async {
     return true;
   }
 
+  // Show the what can we do dialog.
   final context = config.context;
   if (config.whatCanWeDo != null && context.mounted) {
     final result = await whatCanWeDoDialog(
@@ -38,9 +41,9 @@ Future<bool> review(ReviewDialogConfig? config) async {
   return false;
 }
 
-/// true: like
-/// false: dislike
-/// null: cancel
+/// Show the how do you feel dialog to ask user about their feeling. Returns `true`
+/// if the user tap `Like`, `false` if the user tap `Dislike` and `null` when the
+/// user tap `Cancel`.
 Future<bool?> howYouFeelDialog(
   BuildContext context, {
   required String isUsefulText,
@@ -98,7 +101,8 @@ Future<bool?> howYouFeelDialog(
   return isHowYouFeel;
 }
 
-/// Show what can we do dialog
+/// Show the what can we do dialog if the user tap `Dislike` to get the user's
+/// opinion how to improve the app.
 Future<String> whatCanWeDoDialog(
   BuildContext context, {
   required String whatCanWeDoText,

@@ -1,3 +1,8 @@
+## 0.6.1
+
+* Update comments.
+* Update homepage URL.
+
 ## 0.6.0
 
 * Bump dependencies.

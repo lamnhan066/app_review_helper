@@ -4,31 +4,32 @@ class ReviewDialogConfig {
   /// Context for this dialog.
   final BuildContext context;
 
-  /// "Please let us know how you feel about this app?"
+  /// "Please let us know how you feel about this app?".
   final String isUsefulText;
 
-  /// "Like"
+  /// "Like".
   final String likeText;
 
-  /// "Dislike"
+  /// "Dislike".
   final String dislikeText;
 
   /// If this value is set, a second dialog will be shown to ask user's comment
   /// to make this app better. User's comment will be returned to this function.
   final void Function(String whatCanWeDo)? whatCanWeDo;
 
-  /// "What can we do to improve this app?"
+  /// "What can we do to improve this app?".
   final String whatCanWeDoText;
 
-  /// "Submit"
+  /// "Submit".
   final String submitButtonText;
 
-  /// "Cancel"
+  /// "Cancel".
   final String cancelButtonText;
 
-  /// "Completely anonymous"
+  /// "Completely anonymous".
   final String anonymousText;
 
+  /// Configuration for the review dialog.
   const ReviewDialogConfig({
     required this.context,
     this.isUsefulText = 'How do you feel about this app?',
