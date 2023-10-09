@@ -1,3 +1,7 @@
+## 0.7.0
+
+* Upgrade dependencies.
+
 ## 0.6.1
 
 * Update comments.
