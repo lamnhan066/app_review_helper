@@ -5,7 +5,7 @@ This plugin will make it easier for you to use in-app review with minimal condit
 ## Introduction
 
 The dialogs is shown before requesting a review
-![Alt Text](https://raw.githubusercontent.com/vnniz/app_review_helper/main/assets/intro/ReviewHelperComment.webp)
+<img src="https://raw.githubusercontent.com/vnniz/app_review_helper/main/assets/intro/ReviewHelperComment.webp" alt="Alt Text" width="300"/>
 
 ## Usage
 

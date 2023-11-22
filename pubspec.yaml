@@ -1,6 +1,6 @@
 name: app_review_helper
 description: This plugin will make it easier for you to use in-app review with minimal conditions.
-version: 0.7.1
+version: 0.8.0
 homepage: https://github.com/lamnhan066/app_review_helper
 
 screenshots:
@@ -14,18 +14,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  package_info_plus: ^4.2.0
+  package_info_plus: ^5.0.1
   satisfied_version: ^0.4.1
   shared_preferences: ^2.2.2
-  url_launcher: ^6.1.14
+  url_launcher: ^6.2.1
   in_app_review: ^2.0.8
-  update_helper: ^0.6.1
-  conditional_trigger: ^0.2.1
+  update_helper: ^0.7.0
+  conditional_trigger: ^0.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^3.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
