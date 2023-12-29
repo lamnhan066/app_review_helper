@@ -10,7 +10,7 @@ enum ReviewState {
   keepRemindDisabled(
       'The review has been requested and the `keepRemind` was disabled'),
 
-  /// This version is satisfied with `noRequestVersions` => Don\'t request
+  /// This version is satisfied with `noRequestVersions` => Not request.
   noRequestVersion(
       'This version is satisfied with `noRequestVersions` => Don\'t request'),
 
@@ -20,15 +20,15 @@ enum ReviewState {
   /// AppReview.requestReview is called but in debug mode!.
   compeletedInDebugMode('AppReview.requestReview is called but in debug mode!'),
 
-  /// Don't satisfy with minCalls and minDays condition.
-  dontSatisfyWithMinCallsAndDays(
+  /// Not satisfied with minCalls and minDays condition.
+  notSatisfiedWithMinCallsAndDays(
       'Don\'t satisfy with minCalls and minDays condition'),
 
-  /// Don't satisfy with minCalls condition
-  dontSatisfyWithMinCalls('Don\'t satisfy with minCalls condition'),
+  /// Not satisfied with minCalls condition.
+  notSatisfiedWithMinCalls('Don\'t satisfy with minCalls condition'),
 
-  /// Don't satisfy with minDays condition.
-  dontSatisfyWithMinDays('Don\'t satisfy with minDays condition');
+  /// Not satisfied with minDays condition.
+  notSatisfiedWithMinDays('Don\'t satisfy with minDays condition');
 
   /// Natural message for this ReviewState.
   final String text;
