@@ -1,3 +1,8 @@
+## 0.9.0
+
+* Bump `conditional_trigger` to `v0.4.0` (With BREAKCHANGE).
+* Change from `ReviewState.dontSatisfyWithMinCalls`, `ReviewState.dontSatisfyWithMinDays` and `ReviewState.dontSatisfyWithMinCallsAndDays` to `ReviewState.notSatisfiedWithMinCalls`, `ReviewState.notSatisfiedWithMinDays` and `ReviewState.notSatisfiedWithMinCallsAndDays`.
+
 ## 0.8.0
 
 * Bump dependencies.

@@ -17,10 +17,10 @@ dependencies:
   package_info_plus: ^5.0.1
   satisfied_version: ^0.4.1
   shared_preferences: ^2.2.2
-  url_launcher: ^6.2.1
+  url_launcher: ^6.2.2
   in_app_review: ^2.0.8
-  update_helper: ^0.7.0
-  conditional_trigger: ^0.3.0
+  update_helper: ^0.7.1
+  conditional_trigger: ^0.4.0
 
 dev_dependencies:
   flutter_test:
