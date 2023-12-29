@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
         context: context,
         whatCanWeDo: (opinion) {
           /// You can save this user's opinion to your database
-          print(opinion);
+          debugPrint(opinion);
         },
       ),
       minCalls: 0,

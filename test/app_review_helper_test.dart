@@ -62,27 +62,27 @@ void main() {
       expect(returned, ReviewState.noRequestVersion);
     });
 
-    test('ReviewState.dontSatisfyWithMinCallThisFunctionAndDays', () async {
+    test('ReviewState.notSatisfiedWithMinCallThisFunctionAndDays', () async {
       AppReviewHelper.setMockInitialValues(ReviewMock(
         callThisFunction: 0,
         firstDateTime: DateTime.now(),
         inAppReviewForceState: true,
       ));
       final returned = await instance.initial(minCalls: 2, minDays: 2);
-      expect(returned, ReviewState.dontSatisfyWithMinCallsAndDays);
+      expect(returned, ReviewState.notSatisfiedWithMinCallsAndDays);
     });
 
-    test('ReviewState.dontSatisfyWithMinCallThisFunction', () async {
+    test('ReviewState.notSatisfiedWithMinCallThisFunction', () async {
       AppReviewHelper.setMockInitialValues(ReviewMock(
         callThisFunction: 0,
         firstDateTime: DateTime(0),
         inAppReviewForceState: true,
       ));
       final returned = await instance.initial(minCalls: 2);
-      expect(returned, ReviewState.dontSatisfyWithMinCalls);
+      expect(returned, ReviewState.notSatisfiedWithMinCalls);
     });
 
-    test('ReviewState.dontSatisfyWithMinDays', () async {
+    test('ReviewState.notSatisfiedWithMinDays', () async {
       AppReviewHelper.setMockInitialValues(ReviewMock(
         callThisFunction: 5,
         firstDateTime: DateTime.now(),
@@ -90,7 +90,7 @@ void main() {
         inAppReviewForceState: true,
       ));
       final returned = await instance.initial(minDays: 2, minCalls: 3);
-      expect(returned, ReviewState.dontSatisfyWithMinDays);
+      expect(returned, ReviewState.notSatisfiedWithMinDays);
     });
 
     test('ReviewState.completed', () async {

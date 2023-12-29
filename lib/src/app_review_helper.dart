@@ -106,12 +106,12 @@ class AppReviewHelper {
         return _print(ReviewState.keepRemindDisabled)!;
       case ConditionalState.noRequestVersion:
         return _print(ReviewState.noRequestVersion)!;
-      case ConditionalState.dontSatisfyWithMinCallsAndDays:
-        return _print(ReviewState.dontSatisfyWithMinCallsAndDays)!;
-      case ConditionalState.dontSatisfyWithMinCalls:
-        return _print(ReviewState.dontSatisfyWithMinCalls)!;
-      case ConditionalState.dontSatisfyWithMinDays:
-        return _print(ReviewState.dontSatisfyWithMinDays)!;
+      case ConditionalState.notSatisfiedWithMinCallsAndDays:
+        return _print(ReviewState.notSatisfiedWithMinCallsAndDays)!;
+      case ConditionalState.notSatisfiedWithMinCalls:
+        return _print(ReviewState.notSatisfiedWithMinCalls)!;
+      case ConditionalState.notSatisfiedWithMinDays:
+        return _print(ReviewState.notSatisfiedWithMinDays)!;
       case ConditionalState.satisfied:
         if (!isDebug) {
           if (duration != null) await Future.delayed(duration);
