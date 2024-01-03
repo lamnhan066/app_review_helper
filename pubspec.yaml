@@ -1,11 +1,11 @@
 name: app_review_helper
 description: This plugin will make it easier for you to use in-app review with minimal conditions.
-version: 0.9.1
+version: 0.9.2
 homepage: https://github.com/lamnhan066/app_review_helper
 
 screenshots:
   - description: "Introduction"
-    path: assets/intro/ReviewHelperComment.webp
+    path: assets/intro/AppReviewHelperIOS.webp
 
 environment:
   sdk: ">=2.18.0 <4.0.0"

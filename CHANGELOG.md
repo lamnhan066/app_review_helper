@@ -1,3 +1,55 @@
+## 0.9.2
+
+* Add `macos` to the supported platform list.
+* Add `ReviewDialog` abstract so we can easily implement custom dialogs.
+* Add `DefaultReviewDialog` which implements `ReviewDialog` to show the default dialog.
+* Add `AdaptiveReviewDialog` which is the same as `DefaultReviewDialog` but can adapt with the specific platform UI design using `AlertDialog.adaptive`.
+* Mark `ReviewDialogConfig` as deprecated (but not a Breaking Change). Migration guide:
+
+  * Old:
+
+  ```dart
+  instance.initial(
+    reviewDialogConfig: ReviewDialogConfig(
+      context: context,
+      isUsefulText: 'How do you feel about this app?',
+      likeText: 'Like',
+      dislikeText: 'Dislike',
+      whatCanWeDoText: 'Please let us know what we can do to improve this app',
+      submitButtonText: 'Submit',
+      cancelButtonText: 'Cancel',
+      anonymousText: 'Completely anonymous',
+      whatCanWeDo: (opinion) {
+        /// You can save this user's opinion to your database
+        debugPrint(opinion);
+      },
+    ),
+  );
+  ```
+
+  * Now:
+
+  ```dart
+  instance.initial(
+    reviewDialog: DefaultReviewDialog(
+      context: context,
+      satisfactionText: 'How do you feel about this app?',
+      satisfactionLikeText: 'Like',
+      satisfactionLikeIcon: const Icon(Icons.thumb_up),
+      satisfactionDislikeText: 'Dislike',
+      satisfactionDislikeIcon: const Icon(Icons.thumb_down, color: Colors.grey),
+      opinionText: 'Please let us know what we can do to improve this app',
+      opinionSubmitButtonText: 'Submit',
+      opinionCancelButtonText: 'Cancel',
+      opinionAnonymousText: 'Completely anonymous',
+      opinionFeedback: (opinion) {
+        /// You can save this user's opinion to your database
+        debugPrint(opinion);
+      },
+    ),
+  );
+  ```
+
 ## 0.9.1
 
 * Correctly show the review.
