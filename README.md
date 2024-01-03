@@ -4,8 +4,10 @@ This plugin will make it easier for you to use in-app review with minimal condit
 
 ## Introduction
 
-The dialogs is shown before requesting a review
-<img src="https://raw.githubusercontent.com/vnniz/app_review_helper/main/assets/intro/ReviewHelperComment.webp" alt="Alt Text" width="300"/>
+<p>
+    <img src="https://raw.githubusercontent.com/lamnhan066/app_review_helper/main/assets/intro/AppReviewHelperANDROID.webp" alt="Android" width="300"/>
+    <img src="https://raw.githubusercontent.com/lamnhan066/app_review_helper/main/assets/intro/AppReviewHelperIOS.webp" alt="iOS" width="300"/>
+</p>
 
 ## Usage
 
@@ -14,15 +16,27 @@ This method will do nothing if the current platform is other than Android and iO
 ``` dart
 final appReviewHelper = AppReviewHelper.instance;
 appReviewHelper.initial(
-    /// Show a dialog to ask the user about their feeling before the review.
-    /// If the user does not satisfy with the first dialog, the second dialog
-    /// will be shown (if `whatCanWeDo` is set) to ask user's opinion to make
-    /// the app better. 
-    reviewDialogConfig: ReviewDialogConfig(
+    /// [Optional] Show a dialog to ask the user about their feeling before the review. 
+    /// If the user is not satisfied with the first dialog, the second dialog will be 
+    /// shown (if `opinionFeedback` is set) to ask the user's opinion to make the app better. 
+    ///
+    /// Use `AdaptiveReviewDialog` to adapt with `ios` and `macos` specific UI.
+    reviewDialog: DefaultReviewDialog(
         context: context,
-        whatCanWeDo: (opinion) {
-            print(opinion);
-        },
+        satisfactionText: 'How do you feel about this app?',
+        satisfactionLikeText: 'Like',
+        satisfactionLikeIcon: const Icon(Icons.thumb_up),
+        satisfactionDislikeText: 'Dislike',
+        satisfactionDislikeTextColor: Colors.grey,
+        // Should be the same color with `satisfactionDislikeText`.
+        satisfactionDislikeIcon: const Icon(Icons.thumb_down, color: Colors.grey),
+        opinionText: 'Please let us know what we can do to improve this app',
+        opinionSubmitButtonText: 'Submit',
+        opinionCancelButtonText: 'Cancel',
+        opinionAnonymousText: 'Completely anonymous',
+        opinionFeedback: (opinion) {
+          print(opinion);
+      },
     ),
 
     /// Min days
@@ -48,6 +62,28 @@ appReviewHelper.initial(
     /// Print debug log
     isDebug: false,
 );
+```
+
+Besides the `DefaultReviewDialog`, there is an `AdaptiveReviewDialog` which uses `AlertDialog.adaptive` to show the dialog based on whether the target platform (especially for `ios` and `macos`).
+
+You can create your own dialog by implementing `ReviewDialog`:
+
+```dart
+class CustomReviewDialog implements ReviewDialog {
+  CustomReviewDialog();
+  /// This dialog will be shown to ask for users' satisfaction with the app,
+  /// when `true` is returned, the in-app request will be shown, otherwise
+  /// the [opinion] dialog will be shown.
+  @override
+  FutureOr<bool> satisfaction() => throw UnimplementedError();
+
+  /// This dialog will be shown when the user isn't satisfied with the app
+  /// (which means the [satisfaction] dialog returns `false`). You can write
+  /// your logic to send user's feedback to your server.
+  @override
+  FutureOr<void> opinion() => throw UnimplementedError();
+}
+
 ```
 
 Return values:
