@@ -7,7 +7,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.8.0"
+    version: "0.9.1"
   async:
     dependency: transitive
     description:
@@ -60,10 +60,10 @@ packages:
     dependency: transitive
     description:
       name: conditional_trigger
-      sha256: "7cdca7a7fc1f43c1575bcc7c74309618d25d561f0e5d7a1a03dceea6571cefd7"
+      sha256: "4e7e39b2e51279abe304d5708f7d252fea81b2bcb30cd0d9bf9dcdd615634fbb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -384,18 +384,18 @@ packages:
     dependency: transitive
     description:
       name: update_helper
-      sha256: "31d6f6af8ee451c61b6f07468a1148d497fd6ce8afb770956ce9b802fdcf715a"
+      sha256: "1938d057ec14ceaed4f9ebbe66c48a3d6e70b2f850b0c462a14edb7c1a5d3bea"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0"
+    version: "0.7.1"
   url_launcher:
     dependency: transitive
     description:
       name: url_launcher
-      sha256: b1c9e98774adf8820c96fbc7ae3601231d324a7d5ebd8babe27b6dfac91357ba
+      sha256: e9aa5ea75c84cf46b3db4eea212523591211c3cf2e13099ee4ec147f54201c86
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.1"
+    version: "6.2.2"
   url_launcher_android:
     dependency: transitive
     description:

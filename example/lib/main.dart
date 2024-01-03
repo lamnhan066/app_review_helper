@@ -2,7 +2,10 @@ import 'package:app_review_helper/app_review_helper.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MaterialApp(home: MyApp()));
+  runApp(MaterialApp(
+    home: const MyApp(),
+    theme: ThemeData(useMaterial3: false),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -23,9 +26,9 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> init() async {
     instance.initial(
-      reviewDialogConfig: ReviewDialogConfig(
+      reviewDialog: AdaptiveReviewDialog(
         context: context,
-        whatCanWeDo: (opinion) {
+        opinionFeedback: (opinion) {
           /// You can save this user's opinion to your database
           debugPrint(opinion);
         },
