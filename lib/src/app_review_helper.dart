@@ -1,5 +1,6 @@
 import 'package:app_review_helper/src/models/review_dialog_config.dart';
 import 'package:app_review_helper/src/models/review_state.dart';
+import 'package:app_review_helper/src/review.dart';
 import 'package:conditional_trigger/conditional_trigger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -115,6 +116,7 @@ class AppReviewHelper {
       case ConditionalState.satisfied:
         if (!isDebug) {
           if (duration != null) await Future.delayed(duration);
+          if (_mock == null) await review(reviewDialogConfig);
           return _print(ReviewState.completed)!;
         } else {
           return _print(ReviewState.compeletedInDebugMode)!;
