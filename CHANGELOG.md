@@ -1,3 +1,8 @@
+## 0.9.1
+
+* Correctly show the review.
+* Reduced the package size.
+
 ## 0.9.0
 
 * Bump `conditional_trigger` to `v0.4.0` (With BREAKCHANGE).
