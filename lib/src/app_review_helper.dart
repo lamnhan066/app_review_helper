@@ -1,6 +1,8 @@
+import 'dart:async';
+
+import 'package:app_review_helper/src/models/review_dialog.dart';
 import 'package:app_review_helper/src/models/review_dialog_config.dart';
 import 'package:app_review_helper/src/models/review_state.dart';
-import 'package:app_review_helper/src/review.dart';
 import 'package:conditional_trigger/conditional_trigger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -41,13 +43,22 @@ class AppReviewHelper {
   }
 
   /// This function will request an in-app review every time a new version is published
-  /// and it satisfy with the conditions.
+  /// and it's satisfied with the conditions.
   Future<ReviewState> initial({
     /// Show the dialog with thump up - down to let the user to choose before
     /// requesting a review. Only request a review if the thump up is chosen.
     /// If not, the dialog with text field will be shown to get the review
     /// from user.
+    @Deprecated('Use `reviewDialog` for more customizable.')
     ReviewDialogConfig? reviewDialogConfig,
+
+    /// There are 2 kinds of dialogs. The `satisfaction` dialog will be shown first
+    /// to ask for the user's satisfaction. When the user is not satisfied with the app
+    /// (which means the `satisfaction` dialog returns `false`), the second `opinion`
+    /// dialog will be shown to ask for the user's opinion on how to improve the app.
+    ///
+    /// There is a built-in [DefaultReviewDialog].
+    ReviewDialog? reviewDialog,
 
     /// Min days
     int minDays = 3,
@@ -76,10 +87,30 @@ class AppReviewHelper {
 
     final supportedPlatform =
         (defaultTargetPlatform == TargetPlatform.android ||
-                defaultTargetPlatform == TargetPlatform.iOS) &&
+                defaultTargetPlatform == TargetPlatform.iOS ||
+                defaultTargetPlatform == TargetPlatform.macOS) &&
             !kIsWeb;
     if (!supportedPlatform) {
       return _print(ReviewState.unSupportedPlatform)!;
+    }
+
+    // TODO(lamnhan066): Avoid breaking change, so we will remove this temporary solution when `reviewDialogConfig` is removed.
+    if (reviewDialogConfig != null && reviewDialog == null) {
+      reviewDialog = DefaultReviewDialog(
+        context: reviewDialogConfig.context,
+        satisfactionLikeText: reviewDialogConfig.likeText,
+        satisfactionDislikeText: reviewDialogConfig.dislikeText,
+        satisfactionText: reviewDialogConfig.isUsefulText,
+        opinionText: reviewDialogConfig.whatCanWeDoText,
+        opinionSubmitText: reviewDialogConfig.submitButtonText,
+        opinionCancelText: reviewDialogConfig.cancelButtonText,
+        opinionAnonymousText: reviewDialogConfig.anonymousText,
+        opinionFeedback: (opinion) {
+          if (reviewDialogConfig.whatCanWeDo != null) {
+            reviewDialogConfig.whatCanWeDo!(opinion);
+          }
+        },
+      );
     }
 
     final isAvailable = _mock != null
@@ -116,12 +147,39 @@ class AppReviewHelper {
       case ConditionalState.satisfied:
         if (!isDebug) {
           if (duration != null) await Future.delayed(duration);
-          if (_mock == null) await review(reviewDialogConfig);
+          if (_mock == null) await _review(reviewDialog);
           return _print(ReviewState.completed)!;
         } else {
           return _print(ReviewState.compeletedInDebugMode)!;
         }
     }
+  }
+
+  /// If this [reviewDialog] is set, the pre-dialog will be shown before showing the
+  /// request review dialog. Returns `true` if the review dialog is shown, `false`
+  /// will be shown otherwise.
+  Future<bool> _review(ReviewDialog? reviewDialog) async {
+    if (reviewDialog == null) {
+      await InAppReview.instance.requestReview();
+      return true;
+    }
+
+    // Show the how do you feel dialog.
+    final satisfactionCompleter = Completer<bool>();
+    satisfactionCompleter.complete(reviewDialog.satisfaction());
+    final isSatisfied = await satisfactionCompleter.future;
+
+    if (isSatisfied == true) {
+      await InAppReview.instance.requestReview();
+      return true;
+    }
+
+    // Show the what can we do dialog.
+    final opinionCompleter = Completer<void>();
+    opinionCompleter.complete(reviewDialog.opinion());
+    await opinionCompleter.future;
+
+    return false;
   }
 
   ReviewState? _print(Object log) {
