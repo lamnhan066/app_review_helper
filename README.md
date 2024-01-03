@@ -5,8 +5,8 @@ This plugin will make it easier for you to use in-app review with minimal condit
 ## Introduction
 
 <p>
-    <img src="https://raw.githubusercontent.com/vnniz/app_review_helper/main/assets/intro/AppReviewHelperANDROID.webp" alt="Android" width="300"/>
-    <img src="https://raw.githubusercontent.com/vnniz/app_review_helper/main/assets/intro/AppReviewHelperIOS.webp" alt="iOS" width="300"/>
+    <img src="https://raw.githubusercontent.com/lamnhan066/app_review_helper/main/assets/intro/AppReviewHelperANDROID.webp" alt="Android" width="300"/>
+    <img src="https://raw.githubusercontent.com/lamnhan066/app_review_helper/main/assets/intro/AppReviewHelperIOS.webp" alt="iOS" width="300"/>
 </p>
 
 ## Usage
