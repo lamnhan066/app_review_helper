@@ -124,7 +124,7 @@ class DefaultReviewDialog implements ReviewDialog {
               onPressed: () {
                 Navigator.pop(ctx, true);
               },
-              icon: const Icon(Icons.thumb_up),
+              icon: satisfactionLikeIcon,
               label: Text(
                 satisfactionLikeText,
                 style: const TextStyle(fontSize: 12),
