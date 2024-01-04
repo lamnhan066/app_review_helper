@@ -1,3 +1,7 @@
+## 0.9.3
+
+* Fixed: shows the `satisfactionLikeIcon` incorrectly.
+
 ## 0.9.2
 
 * Add `macos` to the supported platform list.
