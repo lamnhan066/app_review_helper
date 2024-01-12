@@ -1,10 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /// The dialogs will be shown before showing the in-app request.
 ///
-/// You can use [DefaultReviewDialog] to use the built-in dialogs.
+/// There are a few built-in dialogs:
+/// - [DefaultReviewDialog] is a default one with `thumbUp` and `thumbDown` icon.
+/// - [AdaptiveReviewDialog] use the adaptive dialog (show the dialog based on whether the target platform)
+///   with `thumbUp` and `thumbDown` icon.
+/// - [FriendlyReviewDialog] is based on the `DefaultReviewDialog` with `smile` and `frown` face icon.
+/// - [FriendlyAdaptiveReviewDialog] is based on the `AdaptiveReviewDialog` with `smile` and `frown` face icon.
 abstract class ReviewDialog {
   /// This dialog will be shown to ask for users' satisfaction with the app,
   /// when `true` is returned, the in-app request will be shown, otherwise
@@ -370,4 +376,54 @@ class AdaptiveReviewDialog extends DefaultReviewDialog {
 
     if (isSubmit == true) opinionFeedback!(text);
   }
+}
+
+class FriendlyReviewDialog extends DefaultReviewDialog {
+  /// The same as the [DefaultReviewDialog] but with friendly Icons.
+  ///
+  ///   `satisfactionLikeIcon` = const Icon(FontAwesomeIcons.faceSmile)
+  ///   `satisfactionDislikeIcon` = const Icon(FontAwesomeIcons.faceFrownOpen, color: Colors.grey)
+  FriendlyReviewDialog({
+    required super.context,
+    super.satisfactionText,
+    super.satisfactionLikeText,
+    super.satisfactionLikeIcon = const Icon(FontAwesomeIcons.faceSmile),
+    super.satisfactionDislikeIcon = const Icon(
+      FontAwesomeIcons.faceFrownOpen,
+      color: Colors.grey,
+    ),
+    super.satisfactionDislikeText,
+    super.satisfactionDislikeTextColor,
+    super.opinionText,
+    super.opinionSubmitText,
+    super.opinionCancelText,
+    super.opinionCancelTextColor,
+    super.opinionAnonymousText,
+    super.opinionFeedback,
+  });
+}
+
+class FriendlyAdaptiveReviewDialog extends AdaptiveReviewDialog {
+  /// The same as the [AdaptiveReviewDialog] but with friendly Icons.
+  ///
+  ///   `satisfactionLikeIcon` = const Icon(FontAwesomeIcons.faceSmile)
+  ///   `satisfactionDislikeIcon` = const Icon(FontAwesomeIcons.faceFrownOpen, color: Colors.grey)
+  FriendlyAdaptiveReviewDialog({
+    required super.context,
+    super.satisfactionText,
+    super.satisfactionLikeText,
+    super.satisfactionLikeIcon = const Icon(FontAwesomeIcons.faceSmile),
+    super.satisfactionDislikeIcon = const Icon(
+      FontAwesomeIcons.faceFrownOpen,
+      color: Colors.grey,
+    ),
+    super.satisfactionDislikeText,
+    super.satisfactionDislikeTextColor,
+    super.opinionText,
+    super.opinionSubmitText,
+    super.opinionCancelText,
+    super.opinionCancelTextColor,
+    super.opinionAnonymousText,
+    super.opinionFeedback,
+  });
 }

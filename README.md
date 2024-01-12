@@ -64,7 +64,12 @@ appReviewHelper.initial(
 );
 ```
 
-Besides the `DefaultReviewDialog`, there is an `AdaptiveReviewDialog` which uses `AlertDialog.adaptive` to show the dialog based on whether the target platform (especially for `ios` and `macos`).
+There are a few built-in dialogs:
+
+- [DefaultReviewDialog] is a default one with `thumbUp` and `thumbDown` icon.
+- [AdaptiveReviewDialog] use the adaptive dialog (show the dialog based on whether the target platform) with `thumbUp` and `thumbDown` icon.
+- [FriendlyReviewDialog] is based on the `DefaultReviewDialog` with `smile` and `frown` face icon.
+- [FriendlyAdaptiveReviewDialog] is based on the `AdaptiveReviewDialog` with `smile` and `frown` face icon.
 
 You can create your own dialog by implementing `ReviewDialog`:
 
