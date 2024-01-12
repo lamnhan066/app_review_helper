@@ -1,6 +1,6 @@
 name: app_review_helper
 description: This plugin will make it easier for you to use in-app review with minimal conditions.
-version: 0.9.3
+version: 0.9.4
 homepage: https://github.com/lamnhan066/app_review_helper
 
 screenshots:
@@ -21,6 +21,7 @@ dependencies:
   in_app_review: ^2.0.8
   update_helper: ^0.7.1
   conditional_trigger: ^0.4.0
+  font_awesome_flutter: ^10.6.0
 
 dev_dependencies:
   flutter_test:

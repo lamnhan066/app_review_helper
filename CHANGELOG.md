@@ -1,3 +1,8 @@
+## 0.9.4
+
+* Add `FriendlyReviewDialog` and `FriendlyAdaptiveReviewDialog` that use `FontAwesomeIcons.faceSmile` and `FontAwesomeIcons.faceFrownOpen` for the satisfaction dialog button icon.
+* Update README.
+
 ## 0.9.3
 
 * Fixed: shows the `satisfactionLikeIcon` incorrectly.
