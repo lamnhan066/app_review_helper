@@ -68,8 +68,8 @@ There are a few built-in dialogs:
 
 - [DefaultReviewDialog] is a default one with `thumbUp` and `thumbDown` icon.
 - [AdaptiveReviewDialog] use the adaptive dialog (show the dialog based on whether the target platform) with `thumbUp` and `thumbDown` icon.
-- [FriendlyReviewDialog] is based on the `DefaultReviewDialog` with `smile` and `frown` face icon.
-- [FriendlyAdaptiveReviewDialog] is based on the `AdaptiveReviewDialog` with `smile` and `frown` face icon.
+- [FriendlyReviewDialog] is based on the `DefaultReviewDialog` with  `Good` and `Improve` text; `smile` and `frown` face icon.
+- [FriendlyAdaptiveReviewDialog] is based on the `AdaptiveReviewDialog` with  `Good` and `Improve` text; `smile` and `frown` face icon.
 
 You can create your own dialog by implementing `ReviewDialog`:
 
@@ -77,10 +77,11 @@ You can create your own dialog by implementing `ReviewDialog`:
 class CustomReviewDialog implements ReviewDialog {
   CustomReviewDialog();
   /// This dialog will be shown to ask for users' satisfaction with the app,
-  /// when `true` is returned, the in-app request will be shown, otherwise
-  /// the [opinion] dialog will be shown.
+  /// when `true` is returned, the in-app request will be shown. When `false`
+  /// is returned, the [opinion] dialog will be shown. The opinion dialog won't
+  /// be shown when returning `null`.
   @override
-  FutureOr<bool> satisfaction() => throw UnimplementedError();
+  FutureOr<bool?> satisfaction() => throw UnimplementedError();
 
   /// This dialog will be shown when the user isn't satisfied with the app
   /// (which means the [satisfaction] dialog returns `false`). You can write

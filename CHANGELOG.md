@@ -1,3 +1,10 @@
+## 0.9.5
+
+* Add `satisfactionBarrierDismissible` and `barrierColor` to the `ReviewDialog`.
+* The opinion dialog won't be shown if the satisfaction dialog is closed by tapping on the barrier.
+* Fix issue that the `AdaptiveReviewDialog` shows the `satisfactionLikeIcon` incorrectly.
+* Use `Good` and `Improve` for the satisfaction dialog of the `FriendlyReviewDialog` and `FriendlyAdaptiveReviewDialog`.
+
 ## 0.9.4
 
 * Add `FriendlyReviewDialog` and `FriendlyAdaptiveReviewDialog` that use `FontAwesomeIcons.faceSmile` and `FontAwesomeIcons.faceFrownOpen` for the satisfaction dialog button icon.
