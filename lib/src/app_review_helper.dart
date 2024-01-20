@@ -165,19 +165,19 @@ class AppReviewHelper {
     }
 
     // Show the how do you feel dialog.
-    final satisfactionCompleter = Completer<bool>();
+    final satisfactionCompleter = Completer<bool?>();
     satisfactionCompleter.complete(reviewDialog.satisfaction());
     final isSatisfied = await satisfactionCompleter.future;
 
     if (isSatisfied == true) {
       await InAppReview.instance.requestReview();
       return true;
+    } else if (isSatisfied == false) {
+      // Show the what can we do dialog.
+      final opinionCompleter = Completer<void>();
+      opinionCompleter.complete(reviewDialog.opinion());
+      await opinionCompleter.future;
     }
-
-    // Show the what can we do dialog.
-    final opinionCompleter = Completer<void>();
-    opinionCompleter.complete(reviewDialog.opinion());
-    await opinionCompleter.future;
 
     return false;
   }
