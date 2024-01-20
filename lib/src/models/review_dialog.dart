@@ -9,13 +9,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 /// - [DefaultReviewDialog] is a default one with `thumbUp` and `thumbDown` icon.
 /// - [AdaptiveReviewDialog] use the adaptive dialog (show the dialog based on whether the target platform)
 ///   with `thumbUp` and `thumbDown` icon.
-/// - [FriendlyReviewDialog] is based on the `DefaultReviewDialog` with `smile` and `frown` face icon.
-/// - [FriendlyAdaptiveReviewDialog] is based on the `AdaptiveReviewDialog` with `smile` and `frown` face icon.
+/// - [FriendlyReviewDialog] is based on the `DefaultReviewDialog` with
+///   `Good` and `Improve` text; `smile` and `frown` face icon.
+/// - [FriendlyAdaptiveReviewDialog] is based on the `AdaptiveReviewDialog` with
+///   `Good` and `Improve` text; `smile` and `frown` face icon.
 abstract class ReviewDialog {
   /// This dialog will be shown to ask for users' satisfaction with the app,
-  /// when `true` is returned, the in-app request will be shown, otherwise
-  /// the [opinion] dialog will be shown.
-  FutureOr<bool> satisfaction() => throw UnimplementedError();
+  /// when `true` is returned, the in-app request will be shown. When `false`
+  /// is returned, the [opinion] dialog will be shown. The opinion dialog won't
+  /// be shown when returning `null`.
+  FutureOr<bool?> satisfaction() => throw UnimplementedError();
 
   /// This dialog will be shown when the user isn't satisfied with the app
   /// (which means the [satisfaction] dialog returns `false`). You can write
@@ -58,6 +61,14 @@ class DefaultReviewDialog implements ReviewDialog {
   /// Default is `Colors.grey`.
   final Color? satisfactionDislikeTextColor;
 
+  /// The `barrierDismissible` argument is used to indicate whether tapping on
+  /// the barrier will dismiss the satisfaction dialog. It is `true` by default
+  /// and can not be `null`. When the satisfaction dialog is closed by this way,
+  /// the app won't show the opinion dialog.
+  ///
+  /// In the opinion dialog, the `barrierDismissible` is always `true`.
+  final bool satisfactionBarrierDismissible;
+
   /// Text for the opinion dialog.
   ///
   /// Default is `Please let us know what we can do to improve this app`.
@@ -90,6 +101,11 @@ class DefaultReviewDialog implements ReviewDialog {
   /// The `opinion` dialog won't be shown when this value is not set.
   final void Function(String opinion)? opinionFeedback;
 
+  /// The `barrierColor` argument is used to specify the color of the modal barrier
+  /// that darkens everything below both satisfaction and opinion dialog.
+  /// If `null` the default color Colors.black54 is used.
+  final Color? barrierColor;
+
   /// Default review dialog.
   ///
   /// Note that the `opinion` dialog won't be shown when `opinionFeedback` value is not set.
@@ -102,59 +118,60 @@ class DefaultReviewDialog implements ReviewDialog {
         const Icon(Icons.thumb_down, color: Colors.grey),
     this.satisfactionDislikeText = 'Dislike',
     this.satisfactionDislikeTextColor = Colors.grey,
+    this.satisfactionBarrierDismissible = true,
     this.opinionText = 'Please let us know what we can do to improve this app',
     this.opinionSubmitText = 'Submit',
     this.opinionCancelText = 'Cancel',
     this.opinionCancelTextColor = Colors.grey,
     this.opinionAnonymousText = 'Completely anonymous',
     this.opinionFeedback,
+    this.barrierColor,
   });
 
   @override
-  Future<bool> satisfaction() async {
+  Future<bool?> satisfaction() async {
     final isSatisfied = await showDialog<bool>(
       context: context,
-      builder: (ctx) => Material(
-        color: Colors.transparent,
-        child: AlertDialog(
-          content: Text(
-            satisfactionText,
-            style: const TextStyle(fontSize: 13),
-            textAlign: TextAlign.center,
-          ),
-          alignment: Alignment.center,
-          actionsAlignment: MainAxisAlignment.spaceEvenly,
-          actionsPadding: const EdgeInsets.all(8),
-          actions: [
-            TextButton.icon(
-              onPressed: () {
-                Navigator.pop(ctx, true);
-              },
-              icon: satisfactionLikeIcon,
-              label: Text(
-                satisfactionLikeText,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
-            TextButton.icon(
-              onPressed: () {
-                Navigator.pop(ctx, false);
-              },
-              icon: satisfactionDislikeIcon,
-              label: Text(
-                satisfactionDislikeText,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: satisfactionDislikeTextColor,
-                ),
-              ),
-            ),
-          ],
+      barrierDismissible: satisfactionBarrierDismissible,
+      barrierColor: barrierColor,
+      builder: (ctx) => AlertDialog(
+        content: Text(
+          satisfactionText,
+          style: const TextStyle(fontSize: 13),
+          textAlign: TextAlign.center,
         ),
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.spaceEvenly,
+        actionsPadding: const EdgeInsets.all(8),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              Navigator.pop(ctx, true);
+            },
+            icon: satisfactionLikeIcon,
+            label: Text(
+              satisfactionLikeText,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          TextButton.icon(
+            onPressed: () {
+              Navigator.pop(ctx, false);
+            },
+            icon: satisfactionDislikeIcon,
+            label: Text(
+              satisfactionDislikeText,
+              style: TextStyle(
+                fontSize: 12,
+                color: satisfactionDislikeTextColor,
+              ),
+            ),
+          ),
+        ],
       ),
     );
 
-    return isSatisfied == true;
+    return isSatisfied;
   }
 
   @override
@@ -165,68 +182,67 @@ class DefaultReviewDialog implements ReviewDialog {
     String text = '';
     final isSubmit = await showDialog<bool>(
       context: context,
-      builder: (ctx) => Material(
-        color: Colors.transparent,
-        child: AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                opinionText,
-                style: const TextStyle(fontSize: 13),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                onChanged: (newText) => text = newText,
-                minLines: 3,
-                maxLines: 6,
-                autocorrect: false,
-                style: const TextStyle(fontSize: 12),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(8.0),
-                  isDense: true,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  opinionAnonymousText,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ],
-          ),
-          actionsPadding: const EdgeInsets.all(12),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx, false);
-              },
-              child: Text(
-                opinionCancelText,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: opinionCancelTextColor,
-                ),
+      barrierDismissible: true,
+      barrierColor: barrierColor,
+      builder: (ctx) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              opinionText,
+              style: const TextStyle(fontSize: 13),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              onChanged: (newText) => text = newText,
+              minLines: 3,
+              maxLines: 6,
+              autocorrect: false,
+              style: const TextStyle(fontSize: 12),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.all(8.0),
+                isDense: true,
               ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx, true);
-              },
+            const SizedBox(height: 2),
+            Align(
+              alignment: Alignment.centerLeft,
               child: Text(
-                opinionSubmitText,
-                style: const TextStyle(fontSize: 12),
+                opinionAnonymousText,
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.left,
               ),
             ),
           ],
         ),
+        actionsPadding: const EdgeInsets.all(12),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx, false);
+            },
+            child: Text(
+              opinionCancelText,
+              style: TextStyle(
+                fontSize: 12,
+                color: opinionCancelTextColor,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx, true);
+            },
+            child: Text(
+              opinionSubmitText,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+        ],
       ),
     );
 
@@ -246,59 +262,60 @@ class AdaptiveReviewDialog extends DefaultReviewDialog {
     super.satisfactionDislikeIcon,
     super.satisfactionDislikeText,
     super.satisfactionDislikeTextColor,
+    super.satisfactionBarrierDismissible,
     super.opinionText,
     super.opinionSubmitText,
     super.opinionCancelText,
     super.opinionCancelTextColor,
     super.opinionAnonymousText,
     super.opinionFeedback,
+    super.barrierColor,
   });
 
   @override
-  Future<bool> satisfaction() async {
+  Future<bool?> satisfaction() async {
     final isSatisfied = await showDialog<bool>(
       context: context,
-      builder: (ctx) => Material(
-        color: Colors.transparent,
-        child: AlertDialog.adaptive(
-          content: Text(
-            satisfactionText,
-            style: const TextStyle(fontSize: 13),
-            textAlign: TextAlign.center,
-          ),
-          alignment: Alignment.center,
-          actionsAlignment: MainAxisAlignment.spaceEvenly,
-          actionsPadding: const EdgeInsets.all(8),
-          actions: [
-            TextButton.icon(
-              onPressed: () {
-                Navigator.pop(ctx, true);
-              },
-              icon: const Icon(Icons.thumb_up),
-              label: Text(
-                satisfactionLikeText,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
-            TextButton.icon(
-              onPressed: () {
-                Navigator.pop(ctx, false);
-              },
-              icon: satisfactionDislikeIcon,
-              label: Text(
-                satisfactionDislikeText,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: satisfactionDislikeTextColor,
-                ),
-              ),
-            ),
-          ],
+      barrierDismissible: satisfactionBarrierDismissible,
+      barrierColor: barrierColor,
+      builder: (ctx) => AlertDialog.adaptive(
+        content: Text(
+          satisfactionText,
+          style: const TextStyle(fontSize: 13),
+          textAlign: TextAlign.center,
         ),
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.spaceEvenly,
+        actionsPadding: const EdgeInsets.all(8),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              Navigator.pop(ctx, true);
+            },
+            icon: satisfactionLikeIcon,
+            label: Text(
+              satisfactionLikeText,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          TextButton.icon(
+            onPressed: () {
+              Navigator.pop(ctx, false);
+            },
+            icon: satisfactionDislikeIcon,
+            label: Text(
+              satisfactionDislikeText,
+              style: TextStyle(
+                fontSize: 12,
+                color: satisfactionDislikeTextColor,
+              ),
+            ),
+          ),
+        ],
       ),
     );
 
-    return isSatisfied == true;
+    return isSatisfied;
   }
 
   @override
@@ -309,68 +326,67 @@ class AdaptiveReviewDialog extends DefaultReviewDialog {
     String text = '';
     final isSubmit = await showDialog<bool>(
       context: context,
-      builder: (ctx) => Material(
-        color: Colors.transparent,
-        child: AlertDialog.adaptive(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                opinionText,
-                style: const TextStyle(fontSize: 13),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                onChanged: (newText) => text = newText,
-                minLines: 3,
-                maxLines: 6,
-                autocorrect: false,
-                style: const TextStyle(fontSize: 12),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(8.0),
-                  isDense: true,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  opinionAnonymousText,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ],
-          ),
-          actionsPadding: const EdgeInsets.all(12),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx, false);
-              },
-              child: Text(
-                opinionCancelText,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: opinionCancelTextColor,
-                ),
+      barrierDismissible: true,
+      barrierColor: barrierColor,
+      builder: (ctx) => AlertDialog.adaptive(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              opinionText,
+              style: const TextStyle(fontSize: 13),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              onChanged: (newText) => text = newText,
+              minLines: 3,
+              maxLines: 6,
+              autocorrect: false,
+              style: const TextStyle(fontSize: 12),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.all(8.0),
+                isDense: true,
               ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx, true);
-              },
+            const SizedBox(height: 2),
+            Align(
+              alignment: Alignment.centerLeft,
               child: Text(
-                opinionSubmitText,
-                style: const TextStyle(fontSize: 12),
+                opinionAnonymousText,
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.left,
               ),
             ),
           ],
         ),
+        actionsPadding: const EdgeInsets.all(12),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx, false);
+            },
+            child: Text(
+              opinionCancelText,
+              style: TextStyle(
+                fontSize: 12,
+                color: opinionCancelTextColor,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx, true);
+            },
+            child: Text(
+              opinionSubmitText,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+        ],
       ),
     );
 
@@ -381,49 +397,57 @@ class AdaptiveReviewDialog extends DefaultReviewDialog {
 class FriendlyReviewDialog extends DefaultReviewDialog {
   /// The same as the [DefaultReviewDialog] but with friendly Icons.
   ///
+  ///   `satisfactionLikeText` = Good
+  ///   `satisfactionDislikeText` = Improve
   ///   `satisfactionLikeIcon` = const Icon(FontAwesomeIcons.faceSmile)
   ///   `satisfactionDislikeIcon` = const Icon(FontAwesomeIcons.faceFrownOpen, color: Colors.grey)
   FriendlyReviewDialog({
     required super.context,
     super.satisfactionText,
-    super.satisfactionLikeText,
+    super.satisfactionLikeText = 'Good',
     super.satisfactionLikeIcon = const Icon(FontAwesomeIcons.faceSmile),
+    super.satisfactionDislikeText = 'Improve',
     super.satisfactionDislikeIcon = const Icon(
       FontAwesomeIcons.faceFrownOpen,
       color: Colors.grey,
     ),
-    super.satisfactionDislikeText,
     super.satisfactionDislikeTextColor,
+    super.satisfactionBarrierDismissible,
     super.opinionText,
     super.opinionSubmitText,
     super.opinionCancelText,
     super.opinionCancelTextColor,
     super.opinionAnonymousText,
     super.opinionFeedback,
+    super.barrierColor,
   });
 }
 
 class FriendlyAdaptiveReviewDialog extends AdaptiveReviewDialog {
   /// The same as the [AdaptiveReviewDialog] but with friendly Icons.
   ///
+  ///   `satisfactionLikeText` = Good
+  ///   `satisfactionDislikeText` = Improve
   ///   `satisfactionLikeIcon` = const Icon(FontAwesomeIcons.faceSmile)
   ///   `satisfactionDislikeIcon` = const Icon(FontAwesomeIcons.faceFrownOpen, color: Colors.grey)
   FriendlyAdaptiveReviewDialog({
     required super.context,
     super.satisfactionText,
-    super.satisfactionLikeText,
+    super.satisfactionLikeText = 'Good',
     super.satisfactionLikeIcon = const Icon(FontAwesomeIcons.faceSmile),
+    super.satisfactionDislikeText = 'Improve',
     super.satisfactionDislikeIcon = const Icon(
       FontAwesomeIcons.faceFrownOpen,
       color: Colors.grey,
     ),
-    super.satisfactionDislikeText,
     super.satisfactionDislikeTextColor,
+    super.satisfactionBarrierDismissible,
     super.opinionText,
     super.opinionSubmitText,
     super.opinionCancelText,
     super.opinionCancelTextColor,
     super.opinionAnonymousText,
     super.opinionFeedback,
+    super.barrierColor,
   });
 }
