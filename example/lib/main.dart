@@ -25,8 +25,51 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> init() async {
-    instance.initial(
+    debugPrint('DefaultReviewDialog');
+    await instance.initial(
+      reviewDialog: DefaultReviewDialog(
+        context: context,
+        opinionFeedback: (opinion) {
+          /// You can save this user's opinion to your database
+          debugPrint(opinion);
+        },
+      ),
+      minCalls: 0,
+      minDays: 0,
+      keepRemind: true,
+      isDebug: false,
+    );
+    debugPrint('AdaptiveReviewDialog');
+    await instance.initial(
       reviewDialog: AdaptiveReviewDialog(
+        context: context,
+        opinionFeedback: (opinion) {
+          /// You can save this user's opinion to your database
+          debugPrint(opinion);
+        },
+      ),
+      minCalls: 0,
+      minDays: 0,
+      keepRemind: true,
+      isDebug: false,
+    );
+    debugPrint('FriendlyReviewDialog');
+    await instance.initial(
+      reviewDialog: FriendlyReviewDialog(
+        context: context,
+        opinionFeedback: (opinion) {
+          /// You can save this user's opinion to your database
+          debugPrint(opinion);
+        },
+      ),
+      minCalls: 0,
+      minDays: 0,
+      keepRemind: true,
+      isDebug: false,
+    );
+    debugPrint('FriendlyAdaptiveReviewDialog');
+    await instance.initial(
+      reviewDialog: FriendlyAdaptiveReviewDialog(
         context: context,
         opinionFeedback: (opinion) {
           /// You can save this user's opinion to your database
