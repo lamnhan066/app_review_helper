@@ -1,6 +1,6 @@
 name: app_review_helper
 description: This plugin will make it easier for you to use in-app review with minimal conditions.
-version: 0.9.5
+version: 0.10.0
 homepage: https://github.com/lamnhan066/app_review_helper
 
 screenshots:
@@ -8,19 +8,18 @@ screenshots:
     path: assets/intro/AppReviewHelperIOS.webp
 
 environment:
-  sdk: ">=2.18.0 <4.0.0"
-  flutter: ">=3.3.0"
+  sdk: ^3.3.0
 
 dependencies:
   flutter:
     sdk: flutter
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.0.0
   satisfied_version: ^0.4.1
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.2
   in_app_review: ^2.0.8
-  update_helper: ^0.7.1
-  conditional_trigger: ^0.4.0
+  update_helper: ^0.8.0
+  conditional_trigger: ^0.5.0
   font_awesome_flutter: ^10.6.0
 
 dev_dependencies:
