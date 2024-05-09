@@ -1,3 +1,8 @@
+## 0.10.0
+
+* Bump the sdk version to `^3.3.0`.
+* Bump the `package_info_plus` version to `^8.0.0`.
+
 ## 0.9.5
 
 * Add `satisfactionBarrierDismissible` and `barrierColor` to the `ReviewDialog`.
