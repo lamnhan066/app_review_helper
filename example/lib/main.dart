@@ -40,47 +40,53 @@ class _MyAppState extends State<MyApp> {
       isDebug: false,
     );
     debugPrint('AdaptiveReviewDialog');
-    await instance.initial(
-      reviewDialog: AdaptiveReviewDialog(
-        context: context,
-        opinionFeedback: (opinion) {
-          /// You can save this user's opinion to your database
-          debugPrint(opinion);
-        },
-      ),
-      minCalls: 0,
-      minDays: 0,
-      keepRemind: true,
-      isDebug: false,
-    );
+    if (mounted) {
+      await instance.initial(
+        reviewDialog: AdaptiveReviewDialog(
+          context: context,
+          opinionFeedback: (opinion) {
+            /// You can save this user's opinion to your database
+            debugPrint(opinion);
+          },
+        ),
+        minCalls: 0,
+        minDays: 0,
+        keepRemind: true,
+        isDebug: false,
+      );
+    }
     debugPrint('FriendlyReviewDialog');
-    await instance.initial(
-      reviewDialog: FriendlyReviewDialog(
-        context: context,
-        opinionFeedback: (opinion) {
-          /// You can save this user's opinion to your database
-          debugPrint(opinion);
-        },
-      ),
-      minCalls: 0,
-      minDays: 0,
-      keepRemind: true,
-      isDebug: false,
-    );
+    if (mounted) {
+      await instance.initial(
+        reviewDialog: FriendlyReviewDialog(
+          context: context,
+          opinionFeedback: (opinion) {
+            /// You can save this user's opinion to your database
+            debugPrint(opinion);
+          },
+        ),
+        minCalls: 0,
+        minDays: 0,
+        keepRemind: true,
+        isDebug: false,
+      );
+    }
     debugPrint('FriendlyAdaptiveReviewDialog');
-    await instance.initial(
-      reviewDialog: FriendlyAdaptiveReviewDialog(
-        context: context,
-        opinionFeedback: (opinion) {
-          /// You can save this user's opinion to your database
-          debugPrint(opinion);
-        },
-      ),
-      minCalls: 0,
-      minDays: 0,
-      keepRemind: true,
-      isDebug: false,
-    );
+    if (mounted) {
+      await instance.initial(
+        reviewDialog: FriendlyAdaptiveReviewDialog(
+          context: context,
+          opinionFeedback: (opinion) {
+            /// You can save this user's opinion to your database
+            debugPrint(opinion);
+          },
+        ),
+        minCalls: 0,
+        minDays: 0,
+        keepRemind: true,
+        isDebug: false,
+      );
+    }
   }
 
   @override
