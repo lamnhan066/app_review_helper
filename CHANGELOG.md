@@ -1,3 +1,7 @@
+## 0.10.1
+
+* Bump dependencies.
+
 ## 0.10.0
 
 * Bump the sdk version to `^3.3.0`.
