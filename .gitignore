@@ -32,3 +32,5 @@ build/
 .flutter-plugins-dependencies
 
 example/pubspec.lock
+
+coverage/
