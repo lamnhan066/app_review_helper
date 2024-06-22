@@ -1,4 +1,4 @@
-/// Result of the review request.
+/// Result of the requested review.
 enum ReviewState {
   /// This platform is not supported.
   unSupportedPlatform('This platform is not supported'),
@@ -32,5 +32,7 @@ enum ReviewState {
 
   /// Natural message for this ReviewState.
   final String text;
+
+  /// Result of the requested review.
   const ReviewState(this.text);
 }

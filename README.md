@@ -31,19 +31,20 @@ appReviewHelper.initial(
         // Should be the same color with `satisfactionDislikeText`.
         satisfactionDislikeIcon: const Icon(Icons.thumb_down, color: Colors.grey),
         opinionText: 'Please let us know what we can do to improve this app',
-        opinionSubmitButtonText: 'Submit',
-        opinionCancelButtonText: 'Cancel',
+        opinionSubmitText: 'Submit',
+        opinionCancelText: 'Cancel',
         opinionAnonymousText: 'Completely anonymous',
         opinionFeedback: (opinion) {
           print(opinion);
-      },
+        },
+        barrierColor: null,
     ),
 
     /// Min days
     minDays: 3,
 
     /// If you add this line in your main(), it's same as app opening count
-    minCallThisFunction: 3,
+    minCalls: 3,
 
     /// If the current version is satisfied with this than not showing the request
     /// this value use plugin `satisfied_version` to compare.
@@ -113,14 +114,14 @@ ReviewState.completed
 /// AppReview.requestReview is called but in debug mode!
 ReviewState.compeletedInDebugMode
 
-/// Don\'t satisfy with minCalls and minDays condition
-ReviewState.dontSatisfyWithMinCallsAndDays
+/// Not satisfied with minCalls and minDays condition
+ReviewState.notSatisfiedWithMinCallsAndDays
 
-/// Don't satisfy with minCalls condition
-ReviewState.dontSatisfyWithMinCalls
+/// Not satisfied with minCalls condition
+ReviewState.notSatisfiedWithMinCalls
 
-/// Don't satisfy with minDays condition
-ReviewState.dontSatisfyWithMinDays
+/// Not satisfied with minDays condition
+ReviewState.notSatisfiedWithMinDays
 ```
 
 Use this function if you want to open the store. This function will try to open the `fallbackUrl` if the current platform is not Android or iOS.
