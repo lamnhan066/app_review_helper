@@ -1,3 +1,7 @@
+## 0.10.2
+
+* Fixes issue with `AdaptiveReviewDialog` on IOS.
+
 ## 0.10.1+1
 
 * Update README and some comments.
