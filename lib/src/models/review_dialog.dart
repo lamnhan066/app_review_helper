@@ -329,39 +329,42 @@ class AdaptiveReviewDialog extends DefaultReviewDialog {
       barrierDismissible: true,
       barrierColor: barrierColor,
       builder: (ctx) => AlertDialog.adaptive(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              opinionText,
-              style: const TextStyle(fontSize: 13),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              onChanged: (newText) => text = newText,
-              minLines: 3,
-              maxLines: 6,
-              autocorrect: false,
-              style: const TextStyle(fontSize: 12),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.all(8.0),
-                isDense: true,
+        content: Material(
+          color: Colors.transparent,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                opinionText,
+                style: const TextStyle(fontSize: 13),
               ),
-            ),
-            const SizedBox(height: 2),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                opinionAnonymousText,
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey,
+              const SizedBox(height: 8),
+              TextField(
+                onChanged: (newText) => text = newText,
+                minLines: 3,
+                maxLines: 6,
+                autocorrect: false,
+                style: const TextStyle(fontSize: 12),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.all(8.0),
+                  isDense: true,
                 ),
-                textAlign: TextAlign.left,
               ),
-            ),
-          ],
+              const SizedBox(height: 2),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  opinionAnonymousText,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: Colors.grey,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            ],
+          ),
         ),
         actionsPadding: const EdgeInsets.all(12),
         actions: [
