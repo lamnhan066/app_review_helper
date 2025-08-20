@@ -1,4 +1,4 @@
-library app_review_helper;
+library;
 
 export 'src/app_review_helper.dart';
 export 'src/models/review_dialog.dart';
