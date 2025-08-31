@@ -1,15 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:app_review_helper/src/models/review_dialog.dart';
-import 'package:app_review_helper/src/models/review_dialog_config.dart';
 import 'package:app_review_helper/src/models/review_state.dart';
 import 'package:conditional_trigger/conditional_trigger.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:in_app_review/in_app_review.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import 'models/review_mock.dart';
 
@@ -28,108 +23,9 @@ class AppReviewHelper {
   /// Debug
   bool _isDebug = false;
 
-  /// Open the store if available, if not, it'll try opening the `fallbackUrl`.
-  Future<void> openStore({String? fallbackUrl}) async {
-    if (kIsWeb) {
-      if (fallbackUrl != null && await canLaunchUrlString(fallbackUrl)) {
-        _print('Open the fallbackUrl on Web platform: $fallbackUrl');
-        await launchUrlString(fallbackUrl);
-      } else {
-        _print('Web platform and fallbackUrl == null');
-      }
-
-      return;
-    }
-
-    final packageName = (await PackageInfo.fromPlatform()).packageName;
-
-    try {
-      if (defaultTargetPlatform == TargetPlatform.android) {
-        try {
-          _print('Android try to launch: market://details?id=$packageName');
-          await launchUrlString(
-            'market://details?id=$packageName',
-            mode: LaunchMode.externalApplication,
-          );
-        } catch (_) {
-          try {
-            _print(
-                'Android try to launch: https://play.google.com/store/apps/details?id=$packageName');
-            await launchUrlString(
-              'https://play.google.com/store/apps/details?id=$packageName',
-              mode: LaunchMode.externalApplication,
-            );
-          } catch (e) {
-            _print(
-                'Cannot get the Store URL on iOS or MacOS, try to launch: $fallbackUrl');
-            if (fallbackUrl != null && await canLaunchUrlString(fallbackUrl)) {
-              await launchUrlString(
-                fallbackUrl,
-                mode: LaunchMode.externalApplication,
-              );
-            } else {
-              rethrow;
-            }
-          }
-        }
-
-        return;
-      }
-
-      if (defaultTargetPlatform
-          case TargetPlatform.iOS || TargetPlatform.macOS) {
-        try {
-          final response = await http.get((Uri.parse(
-              'http://itunes.apple.com/lookup?bundleId=$packageName')));
-          final json = jsonDecode(response.body);
-
-          _print('iOS or MacOS get json from bundleId: $json');
-          _print('iOS or MacOS get trackId: ${json['results'][0]['trackId']}');
-
-          await launchUrlString(
-            'https://apps.apple.com/app/id${json['results'][0]['trackId']}',
-            mode: LaunchMode.externalApplication,
-          );
-        } catch (e) {
-          _print(
-              'Cannot get the Store URL on iOS or MacOS, try to launch: $fallbackUrl');
-          if (fallbackUrl != null && await canLaunchUrlString(fallbackUrl)) {
-            await launchUrlString(
-              fallbackUrl,
-              mode: LaunchMode.externalApplication,
-            );
-          } else {
-            rethrow;
-          }
-        }
-
-        return;
-      }
-
-      if (fallbackUrl != null && await canLaunchUrlString(fallbackUrl)) {
-        _print('Other platforms, try to launch: $fallbackUrl');
-        await launchUrlString(
-          fallbackUrl,
-          mode: LaunchMode.externalApplication,
-        );
-      }
-    } catch (e) {
-      _print('Cannot open the Store automatically!');
-
-      rethrow;
-    }
-  }
-
   /// This function will request an in-app review every time a new version is published
   /// and it's satisfied with the conditions.
   Future<ReviewState> initial({
-    /// Show the dialog with thump up - down to let the user to choose before
-    /// requesting a review. Only request a review if the thump up is chosen.
-    /// If not, the dialog with text field will be shown to get the review
-    /// from user.
-    @Deprecated('Use `reviewDialog` for more customizable.')
-    ReviewDialogConfig? reviewDialogConfig,
-
     /// There are 2 kinds of dialogs. The `satisfaction` dialog will be shown first
     /// to ask for the user's satisfaction. When the user is not satisfied with the app
     /// (which means the `satisfaction` dialog returns `false`), the second `opinion`
@@ -163,32 +59,12 @@ class AppReviewHelper {
   }) async {
     _isDebug = isDebug;
 
-    final supportedPlatform =
+    final supportedPlatform = !kIsWeb &&
         (defaultTargetPlatform == TargetPlatform.android ||
-                defaultTargetPlatform == TargetPlatform.iOS ||
-                defaultTargetPlatform == TargetPlatform.macOS) &&
-            !kIsWeb;
+            defaultTargetPlatform == TargetPlatform.iOS ||
+            defaultTargetPlatform == TargetPlatform.macOS);
     if (!supportedPlatform) {
       return _print(ReviewState.unSupportedPlatform)!;
-    }
-
-    // TODO(lamnhan066): Avoid breaking change, so we will remove this temporary solution when `reviewDialogConfig` is removed.
-    if (reviewDialogConfig != null && reviewDialog == null) {
-      reviewDialog = DefaultReviewDialog(
-        context: reviewDialogConfig.context,
-        satisfactionLikeText: reviewDialogConfig.likeText,
-        satisfactionDislikeText: reviewDialogConfig.dislikeText,
-        satisfactionText: reviewDialogConfig.isUsefulText,
-        opinionText: reviewDialogConfig.whatCanWeDoText,
-        opinionSubmitText: reviewDialogConfig.submitButtonText,
-        opinionCancelText: reviewDialogConfig.cancelButtonText,
-        opinionAnonymousText: reviewDialogConfig.anonymousText,
-        opinionFeedback: (opinion) {
-          if (reviewDialogConfig.whatCanWeDo != null) {
-            reviewDialogConfig.whatCanWeDo!(opinion);
-          }
-        },
-      );
     }
 
     final isAvailable = _mock != null
