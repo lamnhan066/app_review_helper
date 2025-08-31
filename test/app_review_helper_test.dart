@@ -3,7 +3,6 @@ import 'package:app_review_helper/src/models/review_mock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -14,13 +13,6 @@ void main() {
       WidgetsFlutterBinding.ensureInitialized();
       AppReviewHelper.setMockInitialValues();
       SharedPreferences.setMockInitialValues({});
-      PackageInfo.setMockInitialValues(
-        appName: '',
-        packageName: '',
-        version: '',
-        buildNumber: '',
-        buildSignature: '',
-      );
       instance = AppReviewHelper.instance;
       debugDefaultTargetPlatformOverride = null;
     });
