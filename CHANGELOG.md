@@ -1,3 +1,8 @@
+## 0.11.0
+
+* **[BREADKING CHANGE]** Move the `openStore` method to [open_the_store](https://pub.dev/packages/open_the_store) package to avoid useless dependencies.
+* **[BREADKING CHANGE]** Remove deprecated methods.
+
 ## 0.10.2
 
 * Fixes issue with `AdaptiveReviewDialog` on IOS.
