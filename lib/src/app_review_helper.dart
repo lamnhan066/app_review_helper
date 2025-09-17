@@ -119,18 +119,14 @@ class AppReviewHelper {
     }
 
     // Show the how do you feel dialog.
-    final satisfactionCompleter = Completer<bool?>();
-    satisfactionCompleter.complete(reviewDialog.satisfaction());
-    final isSatisfied = await satisfactionCompleter.future;
+    final isSatisfied = await reviewDialog.satisfaction();
 
     if (isSatisfied == true) {
       await InAppReview.instance.requestReview();
       return true;
     } else if (isSatisfied == false) {
       // Show the what can we do dialog.
-      final opinionCompleter = Completer<void>();
-      opinionCompleter.complete(reviewDialog.opinion());
-      await opinionCompleter.future;
+      await reviewDialog.opinion();
     }
 
     return false;
