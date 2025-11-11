@@ -1,3 +1,7 @@
+## 0.12.0
+
+* Bump `conditional_trigger` to `^0.6.0`.
+
 ## 0.11.0
 
 * **[BREADKING CHANGE]** Move the `openStore` method to [open_the_store](https://pub.dev/packages/open_the_store) package to avoid useless dependencies.
