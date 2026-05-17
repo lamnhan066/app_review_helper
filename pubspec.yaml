@@ -16,8 +16,8 @@ dependencies:
   satisfied_version: ^0.4.1
   shared_preferences: ^2.3.0
   in_app_review: ^2.0.9
-  conditional_trigger: ^0.6.0
-  font_awesome_flutter: ^10.7.0
+  conditional_trigger: ^0.7.0
+  font_awesome_flutter: ^11.0.0
 
 dev_dependencies:
   flutter_test:

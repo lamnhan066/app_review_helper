@@ -408,9 +408,9 @@ class FriendlyReviewDialog extends DefaultReviewDialog {
     required super.context,
     super.satisfactionText,
     super.satisfactionLikeText = 'Good',
-    super.satisfactionLikeIcon = const Icon(FontAwesomeIcons.faceSmile),
+    super.satisfactionLikeIcon = const FaIcon(FontAwesomeIcons.faceSmile),
     super.satisfactionDislikeText = 'Improve',
-    super.satisfactionDislikeIcon = const Icon(
+    super.satisfactionDislikeIcon = const FaIcon(
       FontAwesomeIcons.faceFrownOpen,
       color: Colors.grey,
     ),
@@ -437,9 +437,9 @@ class FriendlyAdaptiveReviewDialog extends AdaptiveReviewDialog {
     required super.context,
     super.satisfactionText,
     super.satisfactionLikeText = 'Good',
-    super.satisfactionLikeIcon = const Icon(FontAwesomeIcons.faceSmile),
+    super.satisfactionLikeIcon = const FaIcon(FontAwesomeIcons.faceSmile),
     super.satisfactionDislikeText = 'Improve',
-    super.satisfactionDislikeIcon = const Icon(
+    super.satisfactionDislikeIcon = const FaIcon(
       FontAwesomeIcons.faceFrownOpen,
       color: Colors.grey,
     ),
