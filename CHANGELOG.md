@@ -1,3 +1,8 @@
+## 0.13.0
+
+* Bump `conditional_trigger` to `^0.7.0`.
+* Bump `font_awesome_flutter` to `^11.0.0`.
+
 ## 0.12.0
 
 * Bump `conditional_trigger` to `^0.6.0`.
