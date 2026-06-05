@@ -34,3 +34,4 @@ build/
 example/pubspec.lock
 
 coverage/
+AGENTS.md
