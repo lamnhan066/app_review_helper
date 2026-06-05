@@ -1,3 +1,7 @@
+## 0.13.1
+
+* TYPO: `compeletedInDebugMode` -> `completedInDebugMode`.
+
 ## 0.13.0
 
 * Bump `conditional_trigger` to `^0.7.0`.
