@@ -104,7 +104,7 @@ class AppReviewHelper {
           if (_mock == null) await _review(reviewDialog);
           return _print(ReviewState.completed)!;
         } else {
-          return _print(ReviewState.compeletedInDebugMode)!;
+          return _print(ReviewState.completedInDebugMode)!;
         }
     }
   }

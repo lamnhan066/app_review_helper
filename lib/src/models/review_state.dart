@@ -18,7 +18,7 @@ enum ReviewState {
   completed('Completed request review'),
 
   /// AppReview.requestReview is called but in debug mode!.
-  compeletedInDebugMode('AppReview.requestReview is called but in debug mode!'),
+  completedInDebugMode('AppReview.requestReview is called but in debug mode!'),
 
   /// Not satisfied with minCalls and minDays condition.
   notSatisfiedWithMinCallsAndDays(
@@ -29,6 +29,9 @@ enum ReviewState {
 
   /// Not satisfied with minDays condition.
   notSatisfiedWithMinDays('Don\'t satisfy with minDays condition');
+
+  @Deprecated('Use ReviewState.completedInDebugMode instead')
+  static const compeletedInDebugMode = completedInDebugMode;
 
   /// Natural message for this ReviewState.
   final String text;

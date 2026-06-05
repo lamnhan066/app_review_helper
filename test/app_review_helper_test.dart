@@ -101,7 +101,7 @@ void main() {
       expect(returned, ReviewState.completed);
     });
 
-    test('ReviewState.compeletedInDebugMode', () async {
+    test('ReviewState.completedInDebugMode', () async {
       AppReviewHelper.setMockInitialValues(
         ReviewMock(
           callThisFunction: 5,
@@ -114,6 +114,23 @@ void main() {
         minDays: 5,
         isDebug: true,
       );
+      expect(returned, ReviewState.completedInDebugMode);
+    });
+
+    test('ReviewState.compeletedInDebugMode (deprecated)', () async {
+      AppReviewHelper.setMockInitialValues(
+        ReviewMock(
+          callThisFunction: 5,
+          firstDateTime: DateTime.now().subtract(const Duration(days: 5)),
+          inAppReviewForceState: true,
+        ),
+      );
+      final returned = await instance.initial(
+        minCalls: 5,
+        minDays: 5,
+        isDebug: true,
+      );
+      // Deprecated enum value maps to the same state as completedInDebugMode
       expect(returned, ReviewState.compeletedInDebugMode);
     });
   });
